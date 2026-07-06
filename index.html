@@ -18,6 +18,7 @@
             --primary-hover: #7c3aed;
             --accent: #06b6d4;
             --danger: #f43f5e;
+            --success: #10b981;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -33,7 +34,7 @@
         }
 
         .container { 
-            max-width: 900px; 
+            max-width: 1000px; 
             margin: 0 auto; 
         }
 
@@ -49,6 +50,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
         }
 
         .card { 
@@ -92,7 +100,7 @@
             font-weight: 500;
         }
 
-        input { 
+        input, select { 
             width: 100%; 
             padding: 12px 16px; 
             border: 1px solid var(--glass-border); 
@@ -104,7 +112,7 @@
             transition: all 0.2s ease;
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
@@ -125,9 +133,20 @@
             margin-top: 10px;
         }
 
-        button.btn-primary:hover { 
+        button.btn-success {
+            background: linear-gradient(135deg, var(--success), #059669); 
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        button.btn-primary:hover, button.btn-success:hover { 
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+            filter: brightness(1.1);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         table { 
@@ -221,6 +240,17 @@
             font-size: 0.8em;
             border: 1px solid rgba(139, 92, 246, 0.3);
         }
+        
+        .badge.success { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+        .badge.warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); }
+        .badge.danger { background: rgba(244, 63, 94, 0.2); color: #fb7185; border-color: rgba(244, 63, 94, 0.3); }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background: var(--primary); border-color: var(--primary); font-weight: bold; }
+        .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.1); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
@@ -229,71 +259,154 @@
         
         <div class="card reminder">
             <div>
-                <h2>Recordatorio de IVA Mensual</h2>
+                <h2 style="border:none; margin-bottom:5px; padding:0;">Recordatorio de IVA Mensual</h2>
                 <p style="margin:0; color:#e2e8f0; font-size: 0.95em;">Declara tus movimientos cada mes en el portal de la DNIT.</p>
             </div>
             <a href="https://marangatu.set.gov.py/eset/login" target="_blank" class="link-btn">Ir a Marangatu</a>
         </div>
 
-        <div class="card totals">
-            <span>Ingresos Totales: ₲<span id="totalMonto">0</span></span>
-            <span>IVA Crédito (10% ref): ₲<span id="totalIva">0</span></span>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('tab-ingresos')">Gestión de Ingresos</button>
+            <button class="tab-btn" onclick="switchTab('tab-declaraciones')">Declaraciones e IVA</button>
         </div>
 
-        <div class="card">
-            <h2>Nuevo Registro de Ingreso</h2>
-            <form id="ingresoForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" id="fecha" required>
+        <!-- PESTAÑA: INGRESOS -->
+        <div id="tab-ingresos" class="tab-content active">
+            <div class="card totals">
+                <span>Total General Facturado: ₲<span id="totalMonto">0</span></span>
+                <span>Total IVA Crédito: ₲<span id="totalIva">0</span></span>
+            </div>
+
+            <div class="card">
+                <h2>Nuevo Registro de Ingreso</h2>
+                <form id="ingresoForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Fecha</label>
+                            <input type="date" id="fecha" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cliente / RUC</label>
+                            <input type="text" id="cliente" required placeholder="Nombre o RUC del cliente">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Descripción / Concepto</label>
+                            <input type="text" id="descripcion" required placeholder="Ej. Honorarios profesionales">
+                        </div>
+                        <div class="form-group">
+                            <label>Número de Factura / CDC</label>
+                            <input type="text" id="numero_factura" placeholder="Ej. 001-001-0000001">
+                        </div>
+                        <div class="form-group">
+                            <label>Adjuntar Factura (PDF o Imagen)</label>
+                            <input type="file" id="factura" accept=".pdf,image/*" style="padding: 9px 16px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Monto Total (₲)</label>
+                            <input type="number" id="monto" required min="0" placeholder="Ej. 1100000">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Cliente / RUC</label>
-                        <input type="text" id="cliente" required placeholder="Nombre o RUC del cliente">
-                    </div>
-                    <div class="form-group full-width">
-                        <label>Descripción / Concepto</label>
-                        <input type="text" id="descripcion" required placeholder="Ej. Honorarios profesionales">
-                    </div>
-                    <div class="form-group">
-                        <label>Número de Factura / CDC</label>
-                        <input type="text" id="numero_factura" placeholder="Ej. 001-001-0000001">
-                    </div>
-                    <div class="form-group">
-                        <label>Adjuntar Factura (PDF o Imagen)</label>
-                        <input type="file" id="factura" accept=".pdf,image/*" style="padding: 9px 16px;">
-                    </div>
-                    <div class="form-group">
-                        <label>Monto Total (₲)</label>
-                        <input type="number" id="monto" required min="0" placeholder="Ej. 1100000">
-                    </div>
+                    <button type="submit" class="btn-primary">Agregar Registro de Ingreso</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Registros de Ingresos</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th>Descripción</th>
+                                <th>Nº Factura</th>
+                                <th>Monto Total</th>
+                                <th>IVA (10%)</th>
+                                <th>Neto</th>
+                                <th>Adjunto</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="registrosBody"></tbody>
+                    </table>
                 </div>
-                <button type="submit" class="btn-primary">Agregar Registro</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h2>Registros Recientes</h2>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Cliente</th>
-                            <th>Descripción</th>
-                            <th>Nº Factura</th>
-                            <th>Monto Total</th>
-                            <th>IVA (10%)</th>
-                            <th>Neto</th>
-                            <th>Adjunto</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="registrosBody"></tbody>
-                </table>
             </div>
         </div>
+
+        <!-- PESTAÑA: DECLARACIONES MENSUALES -->
+        <div id="tab-declaraciones" class="tab-content">
+            <div class="card">
+                <h2>Resumen Mensual (Guía para Declarar)</h2>
+                <p style="color:var(--text-muted); font-size:0.9em; margin-top:-10px;">Aquí se suman automáticamente tus ingresos por mes para que sepas qué declarar.</p>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mes / Año</th>
+                                <th>Total Ingresos</th>
+                                <th>Total IVA (10%)</th>
+                                <th>Neto</th>
+                                <th>Estado en DNIT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resumenBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Registrar Declaración en Marangatu</h2>
+                <form id="declaracionForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Mes Correspondiente</label>
+                            <input type="month" id="dec_mes" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha del Trámite</label>
+                            <input type="date" id="dec_fecha" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Resultado de Declaración</label>
+                            <select id="dec_resultado" required>
+                                <option value="A Pagar">A Pagar al Fisco</option>
+                                <option value="Saldo a Favor">Saldo a Favor del Contribuyente</option>
+                                <option value="Sin Movimiento">Sin Movimiento (Monto 0)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Monto (₲)</label>
+                            <input type="number" id="dec_monto" required min="0" value="0">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Comprobante o Boleta de Pago (PDF/Imagen)</label>
+                            <input type="file" id="dec_comprobante" accept=".pdf,image/*" style="padding: 9px 16px;">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-success">Guardar Registro de Declaración</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Historial de Declaraciones</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mes Declarado</th>
+                                <th>Fecha Trámite</th>
+                                <th>Resultado</th>
+                                <th>Monto</th>
+                                <th>Comprobante</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="declaracionesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script type="module">
@@ -305,33 +418,52 @@
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         let registros = [];
+        let declaraciones = [];
 
-        async function cargarRegistros() {
-            const tbody = document.getElementById('registrosBody');
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Sincronizando con la nube...</td></tr>';
-            
-            const { data, error } = await supabase
-                .from('impuestos')
-                .select('*')
-                .order('created_at', { ascending: false });
-                
-            if (error) {
-                console.error('Error al cargar datos:', error);
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--danger);">Error cargando datos. Asegúrate de haber creado la tabla en Supabase.</td></tr>';
-                return;
-            }
-            
-            registros = data || [];
-            renderRegistros();
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
         }
 
-        function renderRegistros() {
+        async function cargarDatos() {
+            const tbodyReg = document.getElementById('registrosBody');
+            const tbodyDec = document.getElementById('declaracionesBody');
+            const tbodyRes = document.getElementById('resumenBody');
+            
+            tbodyReg.innerHTML = '<tr><td colspan="9" style="text-align:center;">Sincronizando con la nube...</td></tr>';
+            
+            const [impReq, decReq] = await Promise.all([
+                supabase.from('impuestos').select('*').order('fecha', { ascending: false }),
+                supabase.from('declaraciones_iva').select('*').order('mes_anio', { ascending: false })
+            ]);
+            
+            if (impReq.error) {
+                console.error('Error impuestos:', impReq.error);
+                tbodyReg.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--danger);">Error cargando tabla de ingresos.</td></tr>';
+            } else {
+                registros = impReq.data || [];
+            }
+
+            if (decReq.error) {
+                console.error('Error declaraciones:', decReq.error);
+                tbodyDec.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);">Error cargando tabla de declaraciones. ¿Creaste la tabla declaraciones_iva?</td></tr>';
+            } else {
+                declaraciones = decReq.data || [];
+            }
+            
+            renderIngresos();
+            renderDeclaracionesYResumen();
+        }
+
+        function renderIngresos() {
             const tbody = document.getElementById('registrosBody');
             tbody.innerHTML = '';
             let total = 0;
 
             if (registros.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">No hay registros en la nube.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:var(--text-muted);">No hay registros en la nube.</td></tr>';
                 document.getElementById('totalMonto').textContent = '0';
                 document.getElementById('totalIva').textContent = '0';
                 return;
@@ -358,7 +490,7 @@
                     <td style="color: var(--text-muted);">₲${iva.toLocaleString('es-PY')}</td>
                     <td style="color: var(--accent); font-weight: 600;">₲${neto.toLocaleString('es-PY')}</td>
                     <td>${facturaHtml}</td>
-                    <td><button class="delete-btn" onclick="eliminarRegistro(${reg.id})" title="Eliminar">✕</button></td>
+                    <td><button class="delete-btn" onclick="eliminarIngreso(${reg.id})" title="Eliminar">✕</button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -367,11 +499,84 @@
             document.getElementById('totalIva').textContent = Math.round(total / 11).toLocaleString('es-PY');
         }
 
+        function renderDeclaracionesYResumen() {
+            // 1. Calcular Resumen por Mes
+            const resumen = {};
+            registros.forEach(reg => {
+                const mes = reg.fecha.substring(0, 7); // Toma "YYYY-MM"
+                if (!resumen[mes]) resumen[mes] = { ingresos: 0, iva: 0, neto: 0 };
+                resumen[mes].ingresos += reg.monto;
+                const iva = Math.round(reg.monto / 11);
+                resumen[mes].iva += iva;
+                resumen[mes].neto += (reg.monto - iva);
+            });
+
+            const tbodyRes = document.getElementById('resumenBody');
+            tbodyRes.innerHTML = '';
+            
+            const meses = Object.keys(resumen).sort().reverse();
+            if (meses.length === 0) {
+                tbodyRes.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Añade ingresos para ver el resumen mensual.</td></tr>';
+            }
+
+            meses.forEach(mes => {
+                const data = resumen[mes];
+                const tr = document.createElement('tr');
+                
+                const estaDeclarado = declaraciones.some(d => d.mes_anio === mes);
+                const estadoHtml = estaDeclarado 
+                    ? `<span class="badge success">Declarado ✔️</span>` 
+                    : `<span class="badge warning">Pendiente</span>`;
+
+                tr.innerHTML = `
+                    <td><strong>${mes}</strong></td>
+                    <td>₲${data.ingresos.toLocaleString('es-PY')}</td>
+                    <td style="color:var(--text-muted);">₲${data.iva.toLocaleString('es-PY')}</td>
+                    <td style="color:var(--accent);">₲${data.neto.toLocaleString('es-PY')}</td>
+                    <td>${estadoHtml}</td>
+                `;
+                tbodyRes.appendChild(tr);
+            });
+
+            // 2. Renderizar Historial de Declaraciones
+            const tbodyDec = document.getElementById('declaracionesBody');
+            tbodyDec.innerHTML = '';
+            
+            if (declaraciones.length === 0) {
+                tbodyDec.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No hay declaraciones registradas.</td></tr>';
+            }
+
+            declaraciones.forEach((dec) => {
+                const tr = document.createElement('tr');
+                
+                let compHtml = '<span style="color:var(--text-muted); font-size:0.9em;">-</span>';
+                if (dec.comprobante_url) {
+                    compHtml = `<a href="${dec.comprobante_url}" target="_blank" class="badge" style="text-decoration:none; border-color:var(--primary); color:var(--primary);">Ver Comprobante</a>`;
+                }
+
+                let badgeClass = 'success';
+                if(dec.resultado === 'A Pagar') badgeClass = 'danger';
+                else if (dec.resultado === 'Sin Movimiento') badgeClass = 'warning';
+
+                tr.innerHTML = `
+                    <td><strong>${dec.mes_anio}</strong></td>
+                    <td>${dec.fecha_declaracion}</td>
+                    <td><span class="badge ${badgeClass}">${dec.resultado}</span></td>
+                    <td style="font-weight: 600;">₲${dec.monto.toLocaleString('es-PY')}</td>
+                    <td>${compHtml}</td>
+                    <td><button class="delete-btn" onclick="eliminarDeclaracion(${dec.id})" title="Eliminar">✕</button></td>
+                `;
+                tbodyDec.appendChild(tr);
+            });
+        }
+
+        // GUARDAR INGRESO
         document.getElementById('ingresoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button');
             const btnOriginalText = btn.textContent;
             btn.disabled = true;
+            btn.textContent = 'Guardando en la nube...';
             
             let factura_url = null;
             const facturaInput = document.getElementById('factura');
@@ -382,26 +587,16 @@
                 const fileExt = file.name.split('.').pop();
                 const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
                 
-                const { error: uploadError } = await supabase.storage
-                    .from('facturas')
-                    .upload(fileName, file);
-                    
+                const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
                 if (uploadError) {
-                    console.error('Error al subir archivo:', uploadError);
-                    alert('Error subiendo factura. Verifica que el Bucket "facturas" exista y sea público.');
-                    btn.textContent = btnOriginalText;
-                    btn.disabled = false;
-                    return;
+                    alert('Error subiendo factura. Verifica el Bucket.');
+                    btn.textContent = btnOriginalText; btn.disabled = false; return;
                 }
-                
-                const { data: publicUrlData } = supabase.storage
-                    .from('facturas')
-                    .getPublicUrl(fileName);
-                factura_url = publicUrlData.publicUrl;
+                const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
+                factura_url = data.publicUrl;
             }
 
-            btn.textContent = 'Guardando en la nube...';
-            
+            btn.textContent = 'Guardando datos...';
             const payload = {
                 fecha: document.getElementById('fecha').value,
                 cliente: document.getElementById('cliente').value,
@@ -412,34 +607,70 @@
             };
 
             const { error } = await supabase.from('impuestos').insert([payload]);
+            btn.textContent = btnOriginalText; btn.disabled = false;
             
-            btn.textContent = btnOriginalText;
-            btn.disabled = false;
-            
-            if (error) {
-                console.error('Error al guardar:', error);
-                alert('Hubo un error al guardar. Revisa la consola y asegúrate de que la tabla "impuestos" existe.');
-            } else {
-                e.target.reset();
-                cargarRegistros();
-            }
+            if (error) alert('Error al guardar. Revisa la consola.');
+            else { e.target.reset(); cargarDatos(); }
         });
 
-        // Como usamos modules (import), hay que exponer la función a window para el onclick del HTML
-        window.eliminarRegistro = async function(id) {
-            if(confirm("¿Eliminar este registro de tus impuestos de forma permanente?")) {
-                const { error } = await supabase.from('impuestos').delete().eq('id', id);
-                if (error) {
-                    console.error('Error al eliminar:', error);
-                    alert('Error al intentar eliminar el registro.');
-                } else {
-                    cargarRegistros();
+        // GUARDAR DECLARACIÓN
+        document.getElementById('declaracionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const btnOriginalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Guardando en la nube...';
+            
+            let comprobante_url = null;
+            const fileInput = document.getElementById('dec_comprobante');
+            
+            if (fileInput.files.length > 0) {
+                btn.textContent = 'Subiendo comprobante...';
+                const file = fileInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `declaracion_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
+                if (uploadError) {
+                    alert('Error subiendo comprobante. Verifica el Bucket.');
+                    btn.textContent = btnOriginalText; btn.disabled = false; return;
                 }
+                const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
+                comprobante_url = data.publicUrl;
+            }
+
+            btn.textContent = 'Guardando datos...';
+            const payload = {
+                mes_anio: document.getElementById('dec_mes').value,
+                fecha_declaracion: document.getElementById('dec_fecha').value,
+                resultado: document.getElementById('dec_resultado').value,
+                monto: parseFloat(document.getElementById('dec_monto').value),
+                comprobante_url: comprobante_url
+            };
+
+            const { error } = await supabase.from('declaraciones_iva').insert([payload]);
+            btn.textContent = btnOriginalText; btn.disabled = false;
+            
+            if (error) alert('Error al guardar la declaración. ¿Ya creaste la tabla declaraciones_iva?');
+            else { e.target.reset(); cargarDatos(); }
+        });
+
+        window.eliminarIngreso = async function(id) {
+            if(confirm("¿Eliminar este registro de tus ingresos?")) {
+                await supabase.from('impuestos').delete().eq('id', id);
+                cargarDatos();
             }
         }
 
-        // Cargar registros iniciales
-        cargarRegistros();
+        window.eliminarDeclaracion = async function(id) {
+            if(confirm("¿Eliminar esta declaración de IVA?")) {
+                await supabase.from('declaraciones_iva').delete().eq('id', id);
+                cargarDatos();
+            }
+        }
+
+        // Init
+        cargarDatos();
     </script>
 </body>
 </html>
