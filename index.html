@@ -266,8 +266,8 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('tab-ingresos')">Gestión de Ingresos</button>
-            <button class="tab-btn" onclick="switchTab('tab-declaraciones')">Declaraciones e IVA</button>
+            <button class="tab-btn active" onclick="switchTab('tab-ingresos', this)">Gestión de Ingresos</button>
+            <button class="tab-btn" onclick="switchTab('tab-declaraciones', this)">Declaraciones e IVA</button>
         </div>
 
         <!-- PESTAÑA: INGRESOS -->
@@ -420,11 +420,13 @@
         let registros = [];
         let declaraciones = [];
 
-        window.switchTab = function(tabId) {
+        window.switchTab = function(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
+            if (element) {
+                element.classList.add('active');
+            }
         }
 
         async function cargarDatos() {
