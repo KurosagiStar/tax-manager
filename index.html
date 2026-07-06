@@ -251,11 +251,49 @@
         .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.1); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+
+        /* Auth Container specific styles */
+        #authContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+        #authContainer .card {
+            width: 100%;
+            max-width: 400px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Mis Impuestos - DNIT</h1>
+
+    <!-- PANTALLA DE LOGIN -->
+    <div id="authContainer" class="container">
+        <div class="card" style="text-align:center;">
+            <h1 style="font-size: 2rem; margin-bottom: 10px; background: linear-gradient(to right, #a78bfa, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Acceso</h1>
+            <p style="color:var(--text-muted); margin-bottom: 20px;">Ingresa para gestionar tus impuestos</p>
+            <form id="authForm">
+                <div class="form-group">
+                    <input type="email" id="authEmail" required placeholder="Tu correo electrónico">
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <input type="password" id="authPassword" required placeholder="Contraseña">
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 20px;" id="authSubmitBtn">Iniciar Sesión</button>
+            </form>
+            <p style="margin-top: 15px; font-size: 0.9em;">
+                <a href="#" id="toggleAuthMode" style="color:var(--accent); text-decoration:none;">¿No tienes cuenta? Regístrate</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- PANTALLA PRINCIPAL DE LA APP (Oculta hasta iniciar sesión) -->
+    <div id="appContainer" class="container" style="display: none;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="margin-bottom: 0;">Mis Impuestos - DNIT</h1>
+            <button id="logoutBtn" class="delete-btn" style="padding: 10px 16px; border-radius: 8px;">Cerrar Sesión</button>
+        </div>
         
         <div class="card reminder">
             <div>
@@ -420,6 +458,7 @@
         let registros = [];
         let declaraciones = [];
 
+        // UI Tabs
         window.switchTab = function(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -428,6 +467,63 @@
                 element.classList.add('active');
             }
         }
+
+        // --- AUTHENTICATION LOGIC ---
+        let isLoginMode = true;
+
+        document.getElementById('toggleAuthMode').addEventListener('click', (e) => {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            document.getElementById('authSubmitBtn').textContent = isLoginMode ? 'Iniciar Sesión' : 'Crear Cuenta';
+            e.target.textContent = isLoginMode ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión';
+            document.querySelector('#authContainer h1').textContent = isLoginMode ? 'Acceso' : 'Registro';
+        });
+
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const btn = document.getElementById('authSubmitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Procesando...';
+
+            if (isLoginMode) {
+                const { error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) alert('Error al iniciar sesión: ' + error.message);
+            } else {
+                const { error } = await supabase.auth.signUp({ email, password });
+                if (error) alert('Error al registrar: ' + error.message);
+                else {
+                    alert('Registro exitoso. Si Supabase pide confirmación de email, revisa tu bandeja de entrada.');
+                    // Opcional: limpiar form
+                    document.getElementById('authForm').reset();
+                    document.getElementById('toggleAuthMode').click(); // volver a login
+                }
+            }
+            btn.disabled = false;
+            btn.textContent = isLoginMode ? 'Iniciar Sesión' : 'Crear Cuenta';
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+        });
+
+        // Listen for Auth changes globally
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                // User is logged in
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+                cargarDatos(); // Solo carga los datos cuando está autenticado
+            } else {
+                // User is logged out
+                document.getElementById('authContainer').style.display = 'flex';
+                document.getElementById('appContainer').style.display = 'none';
+            }
+        });
+
+
+        // --- APP LOGIC ---
 
         async function cargarDatos() {
             const tbodyReg = document.getElementById('registrosBody');
@@ -443,14 +539,14 @@
             
             if (impReq.error) {
                 console.error('Error impuestos:', impReq.error);
-                tbodyReg.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--danger);">Error cargando tabla de ingresos.</td></tr>';
+                tbodyReg.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--danger);">Error cargando tabla de ingresos: ${impReq.error.message}</td></tr>`;
             } else {
                 registros = impReq.data || [];
             }
 
             if (decReq.error) {
                 console.error('Error declaraciones:', decReq.error);
-                tbodyDec.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);">Error cargando tabla de declaraciones. ¿Creaste la tabla declaraciones_iva?</td></tr>';
+                tbodyDec.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);">Error cargando tabla de declaraciones.</td></tr>';
             } else {
                 declaraciones = decReq.data || [];
             }
@@ -465,7 +561,7 @@
             let total = 0;
 
             if (registros.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:var(--text-muted);">No hay registros en la nube.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:var(--text-muted);">No hay registros.</td></tr>';
                 document.getElementById('totalMonto').textContent = '0';
                 document.getElementById('totalIva').textContent = '0';
                 return;
@@ -611,7 +707,7 @@
             const { error } = await supabase.from('impuestos').insert([payload]);
             btn.textContent = btnOriginalText; btn.disabled = false;
             
-            if (error) alert('Error al guardar. Revisa la consola.');
+            if (error) alert('Error al guardar. Verifica la consola.');
             else { e.target.reset(); cargarDatos(); }
         });
 
@@ -653,7 +749,7 @@
             const { error } = await supabase.from('declaraciones_iva').insert([payload]);
             btn.textContent = btnOriginalText; btn.disabled = false;
             
-            if (error) alert('Error al guardar la declaración. ¿Ya creaste la tabla declaraciones_iva?');
+            if (error) alert('Error al guardar la declaración.');
             else { e.target.reset(); cargarDatos(); }
         });
 
@@ -670,9 +766,6 @@
                 cargarDatos();
             }
         }
-
-        // Init
-        cargarDatos();
     </script>
 </body>
 </html>
