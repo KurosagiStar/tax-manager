@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Impuestos - DNIT</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --accent: #06b6d4;
+            --danger: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: radial-gradient(circle at top left, #1e1b4b, var(--bg-color)); 
+            background-attachment: fixed;
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 30px 20px; 
+            min-height: 100vh;
+        }
+
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+        }
+
+        h1, h2 { 
+            font-family: 'Outfit', sans-serif; 
+            margin-top: 0; 
+            color: #fff; 
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .card { 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 24px; 
+            border-radius: 16px; 
+            margin-bottom: 24px; 
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); 
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+        }
+
+        .form-group { margin-bottom: 10px; }
+        
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            color: var(--text-muted); 
+            font-size: 0.9em; 
+            font-weight: 500;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 12px 16px; 
+            border: 1px solid var(--glass-border); 
+            border-radius: 8px; 
+            background: rgba(15, 23, 42, 0.6); 
+            color: #fff; 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        button.btn-primary { 
+            background: linear-gradient(135deg, var(--primary), #6d28d9); 
+            color: #fff; 
+            border: none; 
+            padding: 14px 24px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: 600; 
+            width: 100%; 
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            margin-top: 10px;
+        }
+
+        button.btn-primary:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: separate; 
+            border-spacing: 0;
+            margin-top: 10px; 
+        }
+
+        th, td { 
+            text-align: left; 
+            padding: 14px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
+
+        th { 
+            color: var(--text-muted); 
+            font-weight: 500; 
+            font-size: 0.85em; 
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .link-btn { 
+            display: inline-block; 
+            background: linear-gradient(135deg, var(--accent), #0891b2); 
+            color: #fff; 
+            text-decoration: none; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            text-align: center; 
+            transition: all 0.2s ease; 
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+        }
+
+        .link-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(6, 182, 212, 0.4);
+        }
+
+        .reminder { 
+            background: linear-gradient(135deg, rgba(55, 48, 163, 0.8), rgba(139, 92, 246, 0.8)); 
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .totals { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 1.2em; 
+            font-weight: 600;
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .totals span span { 
+            color: var(--accent); 
+        }
+
+        .delete-btn { 
+            background: rgba(244, 63, 94, 0.1); 
+            color: var(--danger);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            padding: 6px 12px; 
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .delete-btn:hover { 
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .badge {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mis Impuestos - DNIT</h1>
+        
+        <div class="card reminder">
+            <div>
+                <h2>Recordatorio de IVA Mensual</h2>
+                <p style="margin:0; color:#e2e8f0; font-size: 0.95em;">Declara tus movimientos cada mes en el portal de la DNIT.</p>
+            </div>
+            <a href="https://marangatu.set.gov.py/eset/login" target="_blank" class="link-btn">Ir a Marangatu</a>
+        </div>
+
+        <div class="card totals">
+            <span>Ingresos Totales: ₲<span id="totalMonto">0</span></span>
+            <span>IVA Crédito (10% ref): ₲<span id="totalIva">0</span></span>
+        </div>
+
+        <div class="card">
+            <h2>Nuevo Registro de Ingreso</h2>
+            <form id="ingresoForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cliente / RUC</label>
+                        <input type="text" id="cliente" required placeholder="Nombre o RUC del cliente">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Descripción / Concepto</label>
+                        <input type="text" id="descripcion" required placeholder="Ej. Honorarios profesionales">
+                    </div>
+                    <div class="form-group">
+                        <label>Número de Factura / CDC</label>
+                        <input type="text" id="numero_factura" placeholder="Ej. 001-001-0000001">
+                    </div>
+                    <div class="form-group">
+                        <label>Adjuntar Factura (PDF o Imagen)</label>
+                        <input type="file" id="factura" accept=".pdf,image/*" style="padding: 9px 16px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Monto Total (₲)</label>
+                        <input type="number" id="monto" required min="0" placeholder="Ej. 1100000">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Agregar Registro</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Registros Recientes</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Descripción</th>
+                            <th>Nº Factura</th>
+                            <th>Monto Total</th>
+                            <th>IVA (10%)</th>
+                            <th>Neto</th>
+                            <th>Adjunto</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="registrosBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // Credenciales de tu Supabase
+        const supabaseUrl = 'https://rlhlwzizvwncdibhjcnk.supabase.co';
+        const supabaseKey = 'sb_publishable_92DVb46hLRMyB47U_eEdWg_fBFrnknG';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        let registros = [];
+
+        async function cargarRegistros() {
+            const tbody = document.getElementById('registrosBody');
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Sincronizando con la nube...</td></tr>';
+            
+            const { data, error } = await supabase
+                .from('impuestos')
+                .select('*')
+                .order('created_at', { ascending: false });
+                
+            if (error) {
+                console.error('Error al cargar datos:', error);
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--danger);">Error cargando datos. Asegúrate de haber creado la tabla en Supabase.</td></tr>';
+                return;
+            }
+            
+            registros = data || [];
+            renderRegistros();
+        }
+
+        function renderRegistros() {
+            const tbody = document.getElementById('registrosBody');
+            tbody.innerHTML = '';
+            let total = 0;
+
+            if (registros.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">No hay registros en la nube.</td></tr>';
+                document.getElementById('totalMonto').textContent = '0';
+                document.getElementById('totalIva').textContent = '0';
+                return;
+            }
+
+            registros.forEach((reg) => {
+                total += reg.monto;
+                const iva = Math.round(reg.monto / 11); 
+                const neto = reg.monto - iva;
+
+                const tr = document.createElement('tr');
+                
+                let facturaHtml = '<span style="color:var(--text-muted); font-size:0.9em;">-</span>';
+                if (reg.factura_url) {
+                    facturaHtml = `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; border-color:var(--accent); color:var(--accent);">Ver</a>`;
+                }
+
+                tr.innerHTML = `
+                    <td style="white-space: nowrap;">${reg.fecha}</td>
+                    <td><strong>${reg.cliente || '-'}</strong></td>
+                    <td>${reg.descripcion}</td>
+                    <td><span class="badge">${reg.numero_factura || 'S/N'}</span></td>
+                    <td style="font-weight: 600;">₲${reg.monto.toLocaleString('es-PY')}</td>
+                    <td style="color: var(--text-muted);">₲${iva.toLocaleString('es-PY')}</td>
+                    <td style="color: var(--accent); font-weight: 600;">₲${neto.toLocaleString('es-PY')}</td>
+                    <td>${facturaHtml}</td>
+                    <td><button class="delete-btn" onclick="eliminarRegistro(${reg.id})" title="Eliminar">✕</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('totalMonto').textContent = total.toLocaleString('es-PY');
+            document.getElementById('totalIva').textContent = Math.round(total / 11).toLocaleString('es-PY');
+        }
+
+        document.getElementById('ingresoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const btnOriginalText = btn.textContent;
+            btn.disabled = true;
+            
+            let factura_url = null;
+            const facturaInput = document.getElementById('factura');
+            
+            if (facturaInput.files.length > 0) {
+                btn.textContent = 'Subiendo factura...';
+                const file = facturaInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage
+                    .from('facturas')
+                    .upload(fileName, file);
+                    
+                if (uploadError) {
+                    console.error('Error al subir archivo:', uploadError);
+                    alert('Error subiendo factura. Verifica que el Bucket "facturas" exista y sea público.');
+                    btn.textContent = btnOriginalText;
+                    btn.disabled = false;
+                    return;
+                }
+                
+                const { data: publicUrlData } = supabase.storage
+                    .from('facturas')
+                    .getPublicUrl(fileName);
+                factura_url = publicUrlData.publicUrl;
+            }
+
+            btn.textContent = 'Guardando en la nube...';
+            
+            const payload = {
+                fecha: document.getElementById('fecha').value,
+                cliente: document.getElementById('cliente').value,
+                descripcion: document.getElementById('descripcion').value,
+                numero_factura: document.getElementById('numero_factura').value,
+                monto: parseFloat(document.getElementById('monto').value),
+                factura_url: factura_url
+            };
+
+            const { error } = await supabase.from('impuestos').insert([payload]);
+            
+            btn.textContent = btnOriginalText;
+            btn.disabled = false;
+            
+            if (error) {
+                console.error('Error al guardar:', error);
+                alert('Hubo un error al guardar. Revisa la consola y asegúrate de que la tabla "impuestos" existe.');
+            } else {
+                e.target.reset();
+                cargarRegistros();
+            }
+        });
+
+        // Como usamos modules (import), hay que exponer la función a window para el onclick del HTML
+        window.eliminarRegistro = async function(id) {
+            if(confirm("¿Eliminar este registro de tus impuestos de forma permanente?")) {
+                const { error } = await supabase.from('impuestos').delete().eq('id', id);
+                if (error) {
+                    console.error('Error al eliminar:', error);
+                    alert('Error al intentar eliminar el registro.');
+                } else {
+                    cargarRegistros();
+                }
+            }
+        }
+
+        // Cargar registros iniciales
+        cargarRegistros();
+    </script>
+</body>
+</html>
