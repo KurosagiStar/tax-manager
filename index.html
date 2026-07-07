@@ -546,17 +546,17 @@
                         <div class="form-group"><label>Cantidad / Tiempo</label><input type="text" id="inv_cantidad" value="1" class="inv-input"></div>
                         <div class="form-group"><label>Precio Unitario</label><input type="number" id="inv_precio" value="150" class="inv-input"></div>
 
-                        <!-- Emisor (Tu Compañero) -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Datos de tu Compañero (Emisor / Quien cobra)</h3></div>
-                        <div class="form-group"><label>Nombre del Proveedor</label><input type="text" id="inv_emisor_nombre" placeholder="Ej. Sebastian Rojas" class="inv-input"></div>
-                        <div class="form-group"><label>Teléfono / Email</label><input type="text" id="inv_emisor_tel" placeholder="Ej. +1 456..." class="inv-input"></div>
-                        <div class="form-group full-width"><label>Wallet del Proveedor (Donde recibe el pago para QR)</label><input type="text" id="inv_wallet" placeholder="Ej. 0xABC1..." class="inv-input"></div>
+                        <!-- Emisor (Tú) -->
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (Proveedor / Tú recibes el pago)</h3></div>
+                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="inv_emisor_nombre" placeholder="Ej. Richard Mareco" class="inv-input"></div>
+                        <div class="form-group"><label>Tu Teléfono / Email</label><input type="text" id="inv_emisor_tel" placeholder="Ej. +595 982..." class="inv-input"></div>
+                        <div class="form-group full-width"><label>Tu Wallet (Donde recibes el pago para el QR)</label><input type="text" id="inv_wallet" placeholder="Ej. 0xDfD5..." class="inv-input"></div>
 
-                        <!-- Receptor (Tú) -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (Tú eres el Cliente que paga)</h3></div>
-                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="inv_cliente_nombre" placeholder="Ej. Richard Mareco" class="inv-input"></div>
-                        <div class="form-group"><label>Tu Teléfono / Email</label><input type="text" id="inv_cliente_tel" placeholder="Ej. +595 982..." class="inv-input"></div>
-                        <div class="form-group full-width"><label>Tu Wallet (De donde envías los fondos)</label><input type="text" id="inv_cliente_wallet" placeholder="Ej. 0xDfD5..." class="inv-input"></div>
+                        <!-- Receptor (Compañero) -->
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Datos de tu Compañero (Cliente / El que paga)</h3></div>
+                        <div class="form-group"><label>Nombre del Cliente</label><input type="text" id="inv_cliente_nombre" placeholder="Ej. Sebastian Rojas" class="inv-input"></div>
+                        <div class="form-group"><label>Teléfono / Email</label><input type="text" id="inv_cliente_tel" placeholder="Ej. +1 456..." class="inv-input"></div>
+                        <div class="form-group full-width"><label>Wallet del Cliente (Desde donde envía)</label><input type="text" id="inv_cliente_wallet" placeholder="Ej. 0xABC1..." class="inv-input"></div>
 
                         <!-- Pago -->
                         <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Confirmación de Pago (Opcional)</h3></div>
@@ -587,9 +587,10 @@
                                 </table>
                             </div>
                             <div style="text-align: right; max-width: 250px;">
-                                <strong id="pv_emisor_nombre" style="display:block; color:#111; font-size:1.1em; margin-bottom:2px;">-</strong>
-                                <span id="pv_emisor_tel" style="color:#777; display:block; margin-bottom:2px;">-</span>
-                                <span id="pv_wallet" style="color:#777; display:block; font-size:0.8em; word-break: break-all;">-</span>
+                                <span style="color:#777; font-size:0.85em; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:5px;">Facturado a:</span>
+                                <strong id="pv_cliente_nombre" style="display:block; color:#111; font-size:1.1em; margin-bottom:2px;">-</strong>
+                                <span id="pv_cliente_tel" style="color:#777; display:block; margin-bottom:2px;">-</span>
+                                <span id="pv_cliente_wallet" style="color:#777; display:block; font-size:0.8em; word-break: break-all;">-</span>
                             </div>
                         </div>
 
@@ -640,8 +641,8 @@
                         <div style="border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px;">
                             <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Información del Proveedor</h3>
                             <table style="border:none; font-size: 0.9em; margin:0; width:auto;">
-                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Nombre Completo:</td><td id="pv_cliente_nombre" style="border:none; color:#111;">-</td></tr>
-                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Contacto:</td><td id="pv_cliente_tel" style="border:none; color:#111;">-</td></tr>
+                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Nombre Completo:</td><td id="pv_emisor_nombre" style="border:none; color:#111;">-</td></tr>
+                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Contacto:</td><td id="pv_emisor_tel" style="border:none; color:#111;">-</td></tr>
                             </table>
                         </div>
 
