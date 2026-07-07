@@ -11,249 +11,263 @@
     
     <style>
         :root {
-            --bg-color: #0f172a;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --primary: #8b5cf6;
-            --primary-hover: #7c3aed;
-            --accent: #06b6d4;
-            --danger: #f43f5e;
-            --success: #10b981;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-body: #e2e8f0;
+            --paper: #ffffff;
+            --border: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #0ea5e9;
+            --danger: #e11d48;
+            --success: #16a34a;
         }
 
         body { 
             font-family: 'Inter', sans-serif; 
-            background: radial-gradient(circle at top left, #1e1b4b, var(--bg-color)); 
-            background-attachment: fixed;
+            background: var(--bg-body); 
             color: var(--text-main); 
             margin: 0; 
-            padding: 30px 20px; 
+            padding: 40px 20px; 
             min-height: 100vh;
         }
 
         .container { 
-            max-width: 1000px; 
+            max-width: 1100px; 
             margin: 0 auto; 
         }
 
-        h1, h2 { 
+        /* La "Hoja" principal */
+        #appContainer {
+            background: var(--paper);
+            padding: 50px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 4px;
+            min-height: 80vh;
+        }
+
+        h1, h2, h3 { 
             font-family: 'Outfit', sans-serif; 
             margin-top: 0; 
-            color: #fff; 
+            color: var(--text-main); 
         }
 
         h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(to right, #a78bfa, #22d3ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            border-bottom: 3px solid var(--text-main);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 10px;
-        }
-
-        .card { 
-            background: var(--glass-bg); 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            padding: 24px; 
-            border-radius: 16px; 
-            margin-bottom: 24px; 
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); 
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
+            font-size: 1.2rem;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            color: var(--text-main);
+            text-transform: uppercase;
+            font-weight: 700;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 25px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
         }
 
         .form-group.full-width {
-            grid-column: span 2;
+            grid-column: 1 / -1;
         }
 
+        @media (max-width: 900px) {
+            .form-grid { grid-template-columns: 1fr 1fr; }
+        }
         @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
-            .form-group.full-width { grid-column: span 1; }
+            #appContainer { padding: 20px; }
         }
 
-        .form-group { margin-bottom: 10px; }
-        
         label { 
             display: block; 
-            margin-bottom: 8px; 
+            margin-bottom: 6px; 
             color: var(--text-muted); 
-            font-size: 0.9em; 
-            font-weight: 500;
+            font-size: 0.8em; 
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         input, select { 
             width: 100%; 
-            padding: 12px 16px; 
-            border: 1px solid var(--glass-border); 
-            border-radius: 8px; 
-            background: rgba(15, 23, 42, 0.6); 
-            color: #fff; 
+            padding: 10px 12px; 
+            border: 1px solid var(--border); 
+            border-radius: 4px; 
+            background: #ffffff; 
+            color: var(--text-main); 
             box-sizing: border-box; 
             font-family: 'Inter', sans-serif;
-            transition: all 0.2s ease;
+            font-size: 0.95em;
+            transition: all 0.2s;
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         button.btn-primary { 
-            background: linear-gradient(135deg, var(--primary), #6d28d9); 
+            background: var(--text-main); 
             color: #fff; 
             border: none; 
             padding: 14px 24px; 
-            border-radius: 8px; 
+            border-radius: 4px; 
             cursor: pointer; 
-            font-size: 16px; 
+            font-size: 14px; 
             font-weight: 600; 
             width: 100%; 
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-            margin-top: 10px;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: background 0.2s;
         }
 
-        button.btn-success {
-            background: linear-gradient(135deg, var(--success), #059669); 
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
+        button.btn-success { background: var(--success); }
+        button.btn-primary:hover { background: #334155; }
+        button.btn-success:hover { background: #15803d; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        button.btn-primary:hover, button.btn-success:hover { 
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
+        /* Document Tables */
         table { 
             width: 100%; 
-            border-collapse: separate; 
-            border-spacing: 0;
+            border-collapse: collapse; 
             margin-top: 10px; 
+            font-size: 0.9em;
+            border: 1px solid var(--border);
         }
 
         th, td { 
             text-align: left; 
-            padding: 14px; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding: 12px 15px; 
+            border: 1px solid var(--border);
         }
 
         th { 
+            background: #f1f5f9;
             color: var(--text-muted); 
-            font-weight: 500; 
-            font-size: 0.85em; 
+            font-weight: 700; 
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.02em;
+            font-size: 0.85em;
         }
         
-        tbody tr {
-            transition: background 0.2s ease;
-        }
-
-        tbody tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        tbody tr:hover { background: #f1f5f9; }
 
         .link-btn { 
             display: inline-block; 
-            background: linear-gradient(135deg, var(--accent), #0891b2); 
+            background: var(--text-main); 
             color: #fff; 
             text-decoration: none; 
-            padding: 12px 24px; 
-            border-radius: 8px; 
+            padding: 10px 20px; 
+            border-radius: 4px; 
             font-weight: 600; 
-            text-align: center; 
-            transition: all 0.2s ease; 
-            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-
-        .link-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 16px rgba(6, 182, 212, 0.4);
-        }
+        .link-btn:hover { background: #334155; }
 
         .reminder { 
-            background: linear-gradient(135deg, rgba(55, 48, 163, 0.8), rgba(139, 92, 246, 0.8)); 
-            border: 1px solid rgba(139, 92, 246, 0.4);
+            background: #fffbeb; 
+            border: 1px solid #fcd34d;
+            padding: 20px;
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
+            margin-bottom: 30px;
+            color: #92400e;
+            border-radius: 4px;
         }
 
         .totals { 
             display: flex; 
             justify-content: space-between; 
-            font-size: 1.2em; 
-            font-weight: 600;
-            background: rgba(15, 23, 42, 0.8);
+            font-size: 1.1em; 
+            font-weight: 700;
+            background: #f8fafc;
+            padding: 20px;
+            border: 1px solid var(--text-main);
+            margin-bottom: 30px;
+            border-radius: 4px;
+            color: var(--text-main);
         }
 
         .totals span span { 
-            color: var(--accent); 
+            color: var(--success); 
         }
 
         .delete-btn { 
-            background: rgba(244, 63, 94, 0.1); 
+            background: #fff1f2; 
             color: var(--danger);
-            border: 1px solid rgba(244, 63, 94, 0.3);
+            border: 1px solid #fecdd3;
             padding: 6px 12px; 
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 0.8em;
             transition: all 0.2s;
         }
-
-        .delete-btn:hover { 
-            background: var(--danger);
-            color: #fff;
-        }
+        .delete-btn:hover { background: var(--danger); color: #fff; }
 
         .badge {
-            background: rgba(139, 92, 246, 0.2);
-            color: #c4b5fd;
+            background: #e0e7ff;
+            color: #4338ca;
             padding: 4px 8px;
             border-radius: 4px;
             font-size: 0.8em;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            font-weight: 600;
+            border: 1px solid #c7d2fe;
             display: inline-block;
         }
-        
-        .badge.success { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
-        .badge.warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); }
-        .badge.danger { background: rgba(244, 63, 94, 0.2); color: #fb7185; border-color: rgba(244, 63, 94, 0.3); }
+        .badge.success { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+        .badge.warning { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+        .badge.danger { background: #ffe4e6; color: #be123c; border-color: #fecdd3; }
 
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        .tab-btn.active { background: var(--primary); border-color: var(--primary); font-weight: bold; }
-        .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.1); }
+        .tabs { display: flex; gap: 4px; margin-bottom: 25px; border-bottom: 3px solid var(--text-main); }
+        .tab-btn { 
+            background: #f1f5f9; 
+            color: var(--text-muted); 
+            border: 1px solid var(--border); 
+            border-bottom: none;
+            padding: 14px 28px; 
+            border-radius: 4px 4px 0 0; 
+            cursor: pointer; 
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s;
+        }
+        .tab-btn.active { 
+            background: var(--text-main); 
+            color: #fff; 
+            border-color: var(--text-main); 
+        }
+        .tab-btn:hover:not(.active) {
+            background: #e2e8f0;
+        }
+
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* Auth Container specific styles */
+        /* Auth Container */
         #authContainer {
             display: flex;
             align-items: center;
@@ -261,8 +275,19 @@
             min-height: 80vh;
         }
         #authContainer .card {
+            background: var(--paper);
+            padding: 40px;
             width: 100%;
             max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        #authContainer h1 {
+            border-bottom: none;
+            font-size: 1.8rem;
+            color: var(--text-main);
         }
     </style>
 </head>
@@ -270,54 +295,59 @@
 
     <!-- PANTALLA DE LOGIN -->
     <div id="authContainer" class="container">
-        <div class="card" style="text-align:center;">
-            <h1 style="font-size: 2rem; margin-bottom: 10px; background: linear-gradient(to right, #a78bfa, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Acceso</h1>
-            <p style="color:var(--text-muted); margin-bottom: 20px;">Ingresa para gestionar tus impuestos</p>
+        <div class="card">
+            <h1>Libro Contable</h1>
+            <p style="color:var(--text-muted); margin-bottom: 20px; font-weight: 500;">Control de Impuestos DNIT</p>
             <form id="authForm">
-                <div class="form-group">
-                    <input type="email" id="authEmail" required placeholder="Tu correo electrónico">
+                <div class="form-group" style="text-align: left;">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="authEmail" required>
                 </div>
-                <div class="form-group" style="margin-top: 15px;">
-                    <input type="password" id="authPassword" required placeholder="Contraseña">
+                <div class="form-group" style="margin-top: 15px; text-align: left;">
+                    <label>Contraseña</label>
+                    <input type="password" id="authPassword" required>
                 </div>
-                <button type="submit" class="btn-primary" style="margin-top: 20px;" id="authSubmitBtn">Iniciar Sesión</button>
+                <button type="submit" class="btn-primary" style="margin-top: 25px;" id="authSubmitBtn">Iniciar Sesión</button>
             </form>
-            <p style="margin-top: 15px; font-size: 0.9em;">
-                <a href="#" id="toggleAuthMode" style="color:var(--accent); text-decoration:none;">¿No tienes cuenta? Regístrate</a>
+            <p style="margin-top: 20px; font-size: 0.9em;">
+                <a href="#" id="toggleAuthMode" style="color:var(--primary); text-decoration:none; font-weight: 600;">¿No tienes cuenta? Regístrate</a>
             </p>
         </div>
     </div>
 
-    <!-- PANTALLA PRINCIPAL DE LA APP (Oculta hasta iniciar sesión) -->
+    <!-- PANTALLA PRINCIPAL DE LA APP -->
     <div id="appContainer" class="container" style="display: none;">
         
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h1 style="margin-bottom: 0;">Mis Impuestos - DNIT</h1>
-            <button id="logoutBtn" class="delete-btn" style="padding: 10px 16px; border-radius: 8px;">Cerrar Sesión</button>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+            <div>
+                <p style="margin:0; font-weight:bold; color:var(--text-muted); font-size:0.9em; text-transform:uppercase;">Documento Oficial</p>
+                <h1 style="margin-bottom: 0;">Registro de Impuestos - DNIT</h1>
+            </div>
+            <button id="logoutBtn" class="delete-btn" style="padding: 10px 20px; font-size: 0.9em; text-transform:uppercase;">Cerrar Sesión</button>
         </div>
         
-        <div class="card reminder">
+        <div class="reminder">
             <div>
-                <h2 style="border:none; margin-bottom:5px; padding:0;">Recordatorio de IVA Mensual</h2>
-                <p style="margin:0; color:#e2e8f0; font-size: 0.95em;">Declara tus movimientos cada mes en el portal de la DNIT.</p>
+                <h2 style="border:none; margin:0; padding:0; color:#92400e; font-size:1.1em;">Recordatorio Obligatorio: Declaración IVA</h2>
+                <p style="margin:5px 0 0 0; font-size: 0.95em;">Debe declarar sus movimientos mensualmente en el sistema Marangatu.</p>
             </div>
-            <a href="https://marangatu.set.gov.py/eset/login" target="_blank" class="link-btn">Ir a Marangatu</a>
+            <a href="https://marangatu.set.gov.py/eset/login" target="_blank" class="link-btn">Acceder a Marangatu</a>
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('tab-ingresos', this)">Gestión de Ingresos</button>
-            <button class="tab-btn" onclick="switchTab('tab-declaraciones', this)">Declaraciones e IVA</button>
+            <button class="tab-btn active" onclick="switchTab('tab-ingresos', this)">Libro de Ingresos</button>
+            <button class="tab-btn" onclick="switchTab('tab-declaraciones', this)">Declaraciones Mensuales</button>
         </div>
 
         <!-- PESTAÑA: INGRESOS -->
         <div id="tab-ingresos" class="tab-content active">
-            <div class="card totals">
-                <span>Total Bruto Facturado: ₲<span id="totalMonto">0</span></span>
-                <span>Total IVA Crédito: ₲<span id="totalIva">0</span></span>
+            <div class="totals">
+                <span>TOTAL BRUTO FACTURADO: ₲<span id="totalMonto">0</span></span>
+                <span>TOTAL IVA (10%): ₲<span id="totalIva">0</span></span>
             </div>
 
-            <div class="card">
-                <h2>Nuevo Registro de Ingreso</h2>
+            <div>
+                <h2>Ficha de Nuevo Ingreso</h2>
                 <form id="ingresoForm">
                     <div class="form-grid">
                         <div class="form-group">
@@ -326,7 +356,7 @@
                         </div>
                         <div class="form-group">
                             <label>Cliente / País</label>
-                            <input type="text" id="cliente" required placeholder="Ej. Compañero Chile">
+                            <input type="text" id="cliente" required placeholder="Ej. Juan Pérez - Paraguay">
                         </div>
                         <div class="form-group">
                             <label>Tipo de Operación</label>
@@ -339,7 +369,7 @@
                         </div>
                         <div class="form-group">
                             <label>Fuente / Plataforma</label>
-                            <input type="text" id="fuente" placeholder="Ej. X4T, Bitjem, PayPal">
+                            <input type="text" id="fuente" placeholder="Ej. X4T, Banco Itau, PayPal">
                         </div>
                         
                         <!-- Montos -->
@@ -348,7 +378,7 @@
                             <input type="number" id="monto" required min="0" placeholder="Ej. 1100000">
                         </div>
                         <div class="form-group">
-                            <label>Monto Recibido en Banco (Neto)</label>
+                            <label>Monto Neto Recibido en Banco</label>
                             <input type="number" id="monto_banco" min="0" placeholder="Ej. 1000000">
                         </div>
                         <div class="form-group">
@@ -362,30 +392,30 @@
 
                         <!-- Detalles -->
                         <div class="form-group">
-                            <label>Número de Factura DNIT / CDC</label>
+                            <label>Número de Factura / CDC</label>
                             <input type="text" id="numero_factura" placeholder="Ej. 001-001-0000001">
                         </div>
-                        <div class="form-group">
-                            <label>Descripción / Notas</label>
-                            <input type="text" id="descripcion" placeholder="Ej. Retiro X4T - Depósito Bitjem">
+                        <div class="form-group full-width">
+                            <label>Descripción / Notas de la Operación</label>
+                            <input type="text" id="descripcion" placeholder="Ej. Retiro de fondos plataforma X4T">
                         </div>
                         
                         <!-- Archivos -->
                         <div class="form-group">
-                            <label>Factura DNIT (Opcional)</label>
-                            <input type="file" id="factura" accept=".pdf,image/*" style="padding: 9px 16px;">
+                            <label>Adjunto: Factura DNIT (Opcional)</label>
+                            <input type="file" id="factura" accept=".pdf,image/*">
                         </div>
-                        <div class="form-group">
-                            <label>Comprobante Plataforma X4T (Opcional)</label>
-                            <input type="file" id="comprobante_plataforma" accept=".pdf,image/*" style="padding: 9px 16px;">
+                        <div class="form-group full-width">
+                            <label>Adjunto: Comprobante Plataforma (Opcional)</label>
+                            <input type="file" id="comprobante_plataforma" accept=".pdf,image/*">
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary">Agregar Registro de Ingreso</button>
+                    <button type="submit" class="btn-primary">Registrar en el Libro</button>
                 </form>
             </div>
 
-            <div class="card">
-                <h2>Registros de Ingresos</h2>
+            <div style="margin-top: 40px;">
+                <h2>Asientos de Ingresos</h2>
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
@@ -395,7 +425,7 @@
                                 <th>Operación</th>
                                 <th>Bruto DNIT / IVA</th>
                                 <th>Neto a Banco</th>
-                                <th>Adjuntos</th>
+                                <th>Documentos</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -407,18 +437,18 @@
 
         <!-- PESTAÑA: DECLARACIONES MENSUALES -->
         <div id="tab-declaraciones" class="tab-content">
-            <div class="card">
-                <h2>Resumen Mensual (Guía para Declarar)</h2>
-                <p style="color:var(--text-muted); font-size:0.9em; margin-top:-10px;">Aquí se suman automáticamente tus montos brutos por mes para tu declaración a la DNIT.</p>
+            <div>
+                <h2>Balance Mensual para Declaración 120</h2>
+                <p style="color:var(--text-muted); font-size:0.9em; margin-top:-10px;">Sumatoria de montos brutos por mes calendario.</p>
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
                             <tr>
-                                <th>Mes / Año</th>
+                                <th>Período Fiscal</th>
                                 <th>Total Bruto a Declarar</th>
-                                <th>Total IVA (10%)</th>
+                                <th>IVA Crédito (10%)</th>
                                 <th>Neto sin IVA</th>
-                                <th>Estado en DNIT</th>
+                                <th>Estado DNIT</th>
                             </tr>
                         </thead>
                         <tbody id="resumenBody"></tbody>
@@ -426,50 +456,50 @@
                 </div>
             </div>
 
-            <div class="card">
-                <h2>Registrar Declaración en Marangatu</h2>
+            <div style="margin-top: 40px;">
+                <h2>Ficha de Declaración Mensual (Form. 120)</h2>
                 <form id="declaracionForm">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Mes Correspondiente</label>
+                            <label>Período Fiscal (Mes/Año)</label>
                             <input type="month" id="dec_mes" required>
                         </div>
                         <div class="form-group">
-                            <label>Fecha del Trámite</label>
+                            <label>Fecha de Presentación</label>
                             <input type="date" id="dec_fecha" required>
                         </div>
                         <div class="form-group">
-                            <label>Resultado de Declaración</label>
+                            <label>Resultado de Liquidación</label>
                             <select id="dec_resultado" required>
                                 <option value="A Pagar">A Pagar al Fisco</option>
                                 <option value="Saldo a Favor">Saldo a Favor del Contribuyente</option>
-                                <option value="Sin Movimiento">Sin Movimiento (Monto 0)</option>
+                                <option value="Sin Movimiento">Sin Movimiento</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Monto (₲)</label>
+                            <label>Monto Resultante (₲)</label>
                             <input type="number" id="dec_monto" required min="0" value="0">
                         </div>
                         <div class="form-group full-width">
-                            <label>Formulario 120 (PDF/Imagen)</label>
-                            <input type="file" id="dec_comprobante" accept=".pdf,image/*" style="padding: 9px 16px;">
+                            <label>Copia Formulario 120 (PDF/Imagen)</label>
+                            <input type="file" id="dec_comprobante" accept=".pdf,image/*">
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary btn-success">Guardar Registro de Declaración</button>
+                    <button type="submit" class="btn-primary btn-success">Registrar Declaración</button>
                 </form>
             </div>
 
-            <div class="card">
-                <h2>Historial de Declaraciones</h2>
+            <div style="margin-top: 40px;">
+                <h2>Historial de Declaraciones Presentadas</h2>
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
                             <tr>
-                                <th>Mes Declarado</th>
-                                <th>Fecha Trámite</th>
-                                <th>Resultado</th>
+                                <th>Período</th>
+                                <th>Presentación</th>
+                                <th>Liquidación</th>
                                 <th>Monto</th>
-                                <th>Formulario 120</th>
+                                <th>Soporte Físico</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -528,10 +558,9 @@
                 const { error } = await supabase.auth.signUp({ email, password });
                 if (error) alert('Error al registrar: ' + error.message);
                 else {
-                    alert('Registro exitoso. Si Supabase pide confirmación de email, revisa tu bandeja de entrada.');
-                    // Opcional: limpiar form
+                    alert('Registro exitoso.');
                     document.getElementById('authForm').reset();
-                    document.getElementById('toggleAuthMode').click(); // volver a login
+                    document.getElementById('toggleAuthMode').click(); 
                 }
             }
             btn.disabled = false;
@@ -545,12 +574,10 @@
         // Listen for Auth changes globally
         supabase.auth.onAuthStateChange((event, session) => {
             if (session) {
-                // User is logged in
                 document.getElementById('authContainer').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'block';
-                cargarDatos(); // Solo carga los datos cuando está autenticado
+                cargarDatos(); 
             } else {
-                // User is logged out
                 document.getElementById('authContainer').style.display = 'flex';
                 document.getElementById('appContainer').style.display = 'none';
             }
@@ -564,7 +591,7 @@
             const tbodyDec = document.getElementById('declaracionesBody');
             const tbodyRes = document.getElementById('resumenBody');
             
-            tbodyReg.innerHTML = '<tr><td colspan="7" style="text-align:center;">Sincronizando con la nube...</td></tr>';
+            tbodyReg.innerHTML = '<tr><td colspan="7" style="text-align:center;">Sincronizando con la base de datos...</td></tr>';
             
             const [impReq, decReq] = await Promise.all([
                 supabase.from('impuestos').select('*').order('fecha', { ascending: false }),
@@ -572,15 +599,13 @@
             ]);
             
             if (impReq.error) {
-                console.error('Error impuestos:', impReq.error);
-                tbodyReg.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);">Error cargando tabla de ingresos. ¿Ejecutaste el código SQL?</td></tr>`;
+                tbodyReg.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);">Error de conexión: ${impReq.error.message}</td></tr>`;
             } else {
                 registros = impReq.data || [];
             }
 
             if (decReq.error) {
-                console.error('Error declaraciones:', decReq.error);
-                tbodyDec.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);">Error cargando tabla de declaraciones.</td></tr>';
+                tbodyDec.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger);">Error cargando declaraciones.</td></tr>';
             } else {
                 declaraciones = decReq.data || [];
             }
@@ -595,7 +620,7 @@
             let total = 0;
 
             if (registros.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No hay registros.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">Sin asientos registrados.</td></tr>';
                 document.getElementById('totalMonto').textContent = '0';
                 document.getElementById('totalIva').textContent = '0';
                 return;
@@ -608,18 +633,18 @@
                 const tr = document.createElement('tr');
                 
                 let adjuntosHtml = '';
-                if (reg.factura_url) adjuntosHtml += `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; border-color:var(--accent); color:var(--accent); margin-right:5px;" title="Factura DNIT">DNIT</a>`;
-                if (reg.comprobante_plataforma_url) adjuntosHtml += `<a href="${reg.comprobante_plataforma_url}" target="_blank" class="badge" style="text-decoration:none; border-color:var(--primary); color:var(--primary);" title="Comprobante Plataforma">Plataforma</a>`;
-                if (!adjuntosHtml) adjuntosHtml = '<span style="color:var(--text-muted); font-size:0.9em;">-</span>';
+                if (reg.factura_url) adjuntosHtml += `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; margin-right:5px;" title="Factura DNIT">DNIT</a>`;
+                if (reg.comprobante_plataforma_url) adjuntosHtml += `<a href="${reg.comprobante_plataforma_url}" target="_blank" class="badge success" style="text-decoration:none;" title="Comprobante Plataforma">X4T/Plataforma</a>`;
+                if (!adjuntosHtml) adjuntosHtml = '<span style="color:var(--text-muted); font-size:0.9em;">Sin Adjuntos</span>';
 
                 tr.innerHTML = `
                     <td style="white-space: nowrap;">${reg.fecha}</td>
-                    <td><strong>${reg.cliente || '-'}</strong><br><span style="font-size:0.8em; color:var(--text-muted);">${reg.fuente || ''}</span></td>
+                    <td><strong>${reg.cliente || '-'}</strong><br><span style="font-size:0.85em; color:var(--text-muted);">${reg.fuente || ''}</span></td>
                     <td>${reg.tipo_operacion || '-'}</td>
-                    <td style="font-weight: 600;">₲${reg.monto.toLocaleString('es-PY')} <br><span style="font-size:0.8em; color:var(--text-muted);">IVA: ₲${iva.toLocaleString('es-PY')}</span></td>
+                    <td style="font-weight: 600;">₲${reg.monto.toLocaleString('es-PY')} <br><span style="font-size:0.85em; color:var(--text-muted); font-weight:normal;">IVA: ₲${iva.toLocaleString('es-PY')}</span></td>
                     <td style="color: var(--success); font-weight: 600;">₲${(reg.monto_banco || 0).toLocaleString('es-PY')}</td>
                     <td>${adjuntosHtml}</td>
-                    <td><button class="delete-btn" onclick="eliminarIngreso(${reg.id})" title="Eliminar">✕</button></td>
+                    <td><button class="delete-btn" onclick="eliminarIngreso(${reg.id})" title="Eliminar Asiento">✕</button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -632,9 +657,9 @@
             // 1. Calcular Resumen por Mes
             const resumen = {};
             registros.forEach(reg => {
-                const mes = reg.fecha.substring(0, 7); // Toma "YYYY-MM"
+                const mes = reg.fecha.substring(0, 7); 
                 if (!resumen[mes]) resumen[mes] = { ingresos: 0, iva: 0, neto: 0 };
-                resumen[mes].ingresos += reg.monto; // Bruto
+                resumen[mes].ingresos += reg.monto; 
                 const iva = Math.round(reg.monto / 11);
                 resumen[mes].iva += iva;
                 resumen[mes].neto += (reg.monto - iva);
@@ -645,7 +670,7 @@
             
             const meses = Object.keys(resumen).sort().reverse();
             if (meses.length === 0) {
-                tbodyRes.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Añade ingresos para ver el resumen mensual.</td></tr>';
+                tbodyRes.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Sin datos para generar balance.</td></tr>';
             }
 
             meses.forEach(mes => {
@@ -654,14 +679,14 @@
                 
                 const estaDeclarado = declaraciones.some(d => d.mes_anio === mes);
                 const estadoHtml = estaDeclarado 
-                    ? `<span class="badge success">Declarado ✔️</span>` 
+                    ? `<span class="badge success">Presentada ✔️</span>` 
                     : `<span class="badge warning">Pendiente</span>`;
 
                 tr.innerHTML = `
                     <td><strong>${mes}</strong></td>
-                    <td>₲${data.ingresos.toLocaleString('es-PY')}</td>
+                    <td style="font-weight:600;">₲${data.ingresos.toLocaleString('es-PY')}</td>
                     <td style="color:var(--text-muted);">₲${data.iva.toLocaleString('es-PY')}</td>
-                    <td style="color:var(--accent);">₲${data.neto.toLocaleString('es-PY')}</td>
+                    <td>₲${data.neto.toLocaleString('es-PY')}</td>
                     <td>${estadoHtml}</td>
                 `;
                 tbodyRes.appendChild(tr);
@@ -672,7 +697,7 @@
             tbodyDec.innerHTML = '';
             
             if (declaraciones.length === 0) {
-                tbodyDec.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No hay declaraciones registradas.</td></tr>';
+                tbodyDec.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No hay presentaciones registradas.</td></tr>';
             }
 
             declaraciones.forEach((dec) => {
@@ -680,7 +705,7 @@
                 
                 let compHtml = '<span style="color:var(--text-muted); font-size:0.9em;">-</span>';
                 if (dec.comprobante_url) {
-                    compHtml = `<a href="${dec.comprobante_url}" target="_blank" class="badge" style="text-decoration:none; border-color:var(--primary); color:var(--primary);">Ver Formulario</a>`;
+                    compHtml = `<a href="${dec.comprobante_url}" target="_blank" class="badge" style="text-decoration:none;">Ver F.120</a>`;
                 }
 
                 let badgeClass = 'success';
@@ -693,7 +718,7 @@
                     <td><span class="badge ${badgeClass}">${dec.resultado}</span></td>
                     <td style="font-weight: 600;">₲${dec.monto.toLocaleString('es-PY')}</td>
                     <td>${compHtml}</td>
-                    <td><button class="delete-btn" onclick="eliminarDeclaracion(${dec.id})" title="Eliminar">✕</button></td>
+                    <td><button class="delete-btn" onclick="eliminarDeclaracion(${dec.id})" title="Anular">✕</button></td>
                 `;
                 tbodyDec.appendChild(tr);
             });
@@ -705,12 +730,11 @@
             const btn = e.target.querySelector('button');
             const btnOriginalText = btn.textContent;
             btn.disabled = true;
-            btn.textContent = 'Guardando en la nube...';
+            btn.textContent = 'Procesando Documento...';
             
             let factura_url = null;
             let comp_plat_url = null;
             
-            // Subir Factura DNIT
             const facturaInput = document.getElementById('factura');
             if (facturaInput.files.length > 0) {
                 btn.textContent = 'Subiendo factura DNIT...';
@@ -725,10 +749,9 @@
                 }
             }
 
-            // Subir Comprobante Plataforma X4T
             const compInput = document.getElementById('comprobante_plataforma');
             if (compInput.files.length > 0) {
-                btn.textContent = 'Subiendo comprobante X4T...';
+                btn.textContent = 'Subiendo comprobante de plataforma...';
                 const file = compInput.files[0];
                 const fileExt = file.name.split('.').pop();
                 const fileName = `x4t_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
@@ -740,7 +763,7 @@
                 }
             }
 
-            btn.textContent = 'Guardando datos...';
+            btn.textContent = 'Registrando Asiento...';
             const payload = {
                 fecha: document.getElementById('fecha').value,
                 cliente: document.getElementById('cliente').value,
@@ -749,7 +772,6 @@
                 monto: parseFloat(document.getElementById('monto').value) || 0,
                 factura_url: factura_url,
                 
-                // Nuevos campos Grok
                 tipo_operacion: document.getElementById('tipo_operacion').value,
                 fuente: document.getElementById('fuente').value,
                 monto_banco: parseFloat(document.getElementById('monto_banco').value) || 0,
@@ -761,7 +783,7 @@
             const { error } = await supabase.from('impuestos').insert([payload]);
             btn.textContent = btnOriginalText; btn.disabled = false;
             
-            if (error) alert('Error al guardar. Asegúrate de haber ejecutado el SQL para las nuevas columnas.');
+            if (error) alert('Error al guardar. Verifique su conexión.');
             else { e.target.reset(); cargarDatos(); }
         });
 
@@ -771,27 +793,25 @@
             const btn = e.target.querySelector('button');
             const btnOriginalText = btn.textContent;
             btn.disabled = true;
-            btn.textContent = 'Guardando en la nube...';
+            btn.textContent = 'Procesando...';
             
             let comprobante_url = null;
             const fileInput = document.getElementById('dec_comprobante');
             
             if (fileInput.files.length > 0) {
-                btn.textContent = 'Subiendo comprobante...';
+                btn.textContent = 'Adjuntando Formulario...';
                 const file = fileInput.files[0];
                 const fileExt = file.name.split('.').pop();
                 const fileName = `declaracion_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
                 
                 const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
-                if (uploadError) {
-                    alert('Error subiendo comprobante. Verifica el Bucket.');
-                    btn.textContent = btnOriginalText; btn.disabled = false; return;
+                if (!uploadError) {
+                    const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
+                    comprobante_url = data.publicUrl;
                 }
-                const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
-                comprobante_url = data.publicUrl;
             }
 
-            btn.textContent = 'Guardando datos...';
+            btn.textContent = 'Registrando Presentación...';
             const payload = {
                 mes_anio: document.getElementById('dec_mes').value,
                 fecha_declaracion: document.getElementById('dec_fecha').value,
@@ -803,19 +823,19 @@
             const { error } = await supabase.from('declaraciones_iva').insert([payload]);
             btn.textContent = btnOriginalText; btn.disabled = false;
             
-            if (error) alert('Error al guardar la declaración.');
+            if (error) alert('Error al registrar presentación.');
             else { e.target.reset(); cargarDatos(); }
         });
 
         window.eliminarIngreso = async function(id) {
-            if(confirm("¿Eliminar este registro de tus ingresos?")) {
+            if(confirm("¿Anular este registro del libro?")) {
                 await supabase.from('impuestos').delete().eq('id', id);
                 cargarDatos();
             }
         }
 
         window.eliminarDeclaracion = async function(id) {
-            if(confirm("¿Eliminar esta declaración de IVA?")) {
+            if(confirm("¿Anular esta declaración de IVA?")) {
                 await supabase.from('declaraciones_iva').delete().eq('id', id);
                 cargarDatos();
             }
