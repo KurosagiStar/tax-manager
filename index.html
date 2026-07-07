@@ -239,6 +239,7 @@
             border-radius: 4px;
             font-size: 0.8em;
             border: 1px solid rgba(139, 92, 246, 0.3);
+            display: inline-block;
         }
         
         .badge.success { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
@@ -311,7 +312,7 @@
         <!-- PESTAÑA: INGRESOS -->
         <div id="tab-ingresos" class="tab-content active">
             <div class="card totals">
-                <span>Total General Facturado: ₲<span id="totalMonto">0</span></span>
+                <span>Total Bruto Facturado: ₲<span id="totalMonto">0</span></span>
                 <span>Total IVA Crédito: ₲<span id="totalIva">0</span></span>
             </div>
 
@@ -324,24 +325,59 @@
                             <input type="date" id="fecha" required>
                         </div>
                         <div class="form-group">
-                            <label>Cliente / RUC</label>
-                            <input type="text" id="cliente" required placeholder="Nombre o RUC del cliente">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Descripción / Concepto</label>
-                            <input type="text" id="descripcion" required placeholder="Ej. Honorarios profesionales">
+                            <label>Cliente / País</label>
+                            <input type="text" id="cliente" required placeholder="Ej. Compañero Chile">
                         </div>
                         <div class="form-group">
-                            <label>Número de Factura / CDC</label>
+                            <label>Tipo de Operación</label>
+                            <select id="tipo_operacion">
+                                <option value="Servicios Profesionales">Servicios Profesionales</option>
+                                <option value="Venta de Scripts">Venta de Scripts</option>
+                                <option value="Servicio Programación">Servicio Programación</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fuente / Plataforma</label>
+                            <input type="text" id="fuente" placeholder="Ej. X4T, Bitjem, PayPal">
+                        </div>
+                        
+                        <!-- Montos -->
+                        <div class="form-group">
+                            <label>Monto Bruto Facturado (₲) - DNIT</label>
+                            <input type="number" id="monto" required min="0" placeholder="Ej. 1100000">
+                        </div>
+                        <div class="form-group">
+                            <label>Monto Recibido en Banco (Neto)</label>
+                            <input type="number" id="monto_banco" min="0" placeholder="Ej. 1000000">
+                        </div>
+                        <div class="form-group">
+                            <label>Comisión Fija (Monto)</label>
+                            <input type="number" id="comision_fija" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Comisión Adicional (%)</label>
+                            <input type="number" id="comision_porcentaje" step="0.01" min="0" value="0">
+                        </div>
+
+                        <!-- Detalles -->
+                        <div class="form-group">
+                            <label>Número de Factura DNIT / CDC</label>
                             <input type="text" id="numero_factura" placeholder="Ej. 001-001-0000001">
                         </div>
                         <div class="form-group">
-                            <label>Adjuntar Factura (PDF o Imagen)</label>
+                            <label>Descripción / Notas</label>
+                            <input type="text" id="descripcion" placeholder="Ej. Retiro X4T - Depósito Bitjem">
+                        </div>
+                        
+                        <!-- Archivos -->
+                        <div class="form-group">
+                            <label>Factura DNIT (Opcional)</label>
                             <input type="file" id="factura" accept=".pdf,image/*" style="padding: 9px 16px;">
                         </div>
                         <div class="form-group">
-                            <label>Monto Total (₲)</label>
-                            <input type="number" id="monto" required min="0" placeholder="Ej. 1100000">
+                            <label>Comprobante Plataforma X4T (Opcional)</label>
+                            <input type="file" id="comprobante_plataforma" accept=".pdf,image/*" style="padding: 9px 16px;">
                         </div>
                     </div>
                     <button type="submit" class="btn-primary">Agregar Registro de Ingreso</button>
@@ -355,13 +391,11 @@
                         <thead>
                             <tr>
                                 <th>Fecha</th>
-                                <th>Cliente</th>
-                                <th>Descripción</th>
-                                <th>Nº Factura</th>
-                                <th>Monto Total</th>
-                                <th>IVA (10%)</th>
-                                <th>Neto</th>
-                                <th>Adjunto</th>
+                                <th>Origen</th>
+                                <th>Operación</th>
+                                <th>Bruto DNIT / IVA</th>
+                                <th>Neto a Banco</th>
+                                <th>Adjuntos</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -375,15 +409,15 @@
         <div id="tab-declaraciones" class="tab-content">
             <div class="card">
                 <h2>Resumen Mensual (Guía para Declarar)</h2>
-                <p style="color:var(--text-muted); font-size:0.9em; margin-top:-10px;">Aquí se suman automáticamente tus ingresos por mes para que sepas qué declarar.</p>
+                <p style="color:var(--text-muted); font-size:0.9em; margin-top:-10px;">Aquí se suman automáticamente tus montos brutos por mes para tu declaración a la DNIT.</p>
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
                             <tr>
                                 <th>Mes / Año</th>
-                                <th>Total Ingresos</th>
+                                <th>Total Bruto a Declarar</th>
                                 <th>Total IVA (10%)</th>
-                                <th>Neto</th>
+                                <th>Neto sin IVA</th>
                                 <th>Estado en DNIT</th>
                             </tr>
                         </thead>
@@ -530,7 +564,7 @@
             const tbodyDec = document.getElementById('declaracionesBody');
             const tbodyRes = document.getElementById('resumenBody');
             
-            tbodyReg.innerHTML = '<tr><td colspan="9" style="text-align:center;">Sincronizando con la nube...</td></tr>';
+            tbodyReg.innerHTML = '<tr><td colspan="7" style="text-align:center;">Sincronizando con la nube...</td></tr>';
             
             const [impReq, decReq] = await Promise.all([
                 supabase.from('impuestos').select('*').order('fecha', { ascending: false }),
@@ -539,7 +573,7 @@
             
             if (impReq.error) {
                 console.error('Error impuestos:', impReq.error);
-                tbodyReg.innerHTML = `<tr><td colspan="9" style="text-align:center;color:var(--danger);">Error cargando tabla de ingresos: ${impReq.error.message}</td></tr>`;
+                tbodyReg.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);">Error cargando tabla de ingresos. ¿Ejecutaste el código SQL?</td></tr>`;
             } else {
                 registros = impReq.data || [];
             }
@@ -561,7 +595,7 @@
             let total = 0;
 
             if (registros.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:var(--text-muted);">No hay registros.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No hay registros.</td></tr>';
                 document.getElementById('totalMonto').textContent = '0';
                 document.getElementById('totalIva').textContent = '0';
                 return;
@@ -570,24 +604,21 @@
             registros.forEach((reg) => {
                 total += reg.monto;
                 const iva = Math.round(reg.monto / 11); 
-                const neto = reg.monto - iva;
 
                 const tr = document.createElement('tr');
                 
-                let facturaHtml = '<span style="color:var(--text-muted); font-size:0.9em;">-</span>';
-                if (reg.factura_url) {
-                    facturaHtml = `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; border-color:var(--accent); color:var(--accent);">Ver</a>`;
-                }
+                let adjuntosHtml = '';
+                if (reg.factura_url) adjuntosHtml += `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; border-color:var(--accent); color:var(--accent); margin-right:5px;" title="Factura DNIT">DNIT</a>`;
+                if (reg.comprobante_plataforma_url) adjuntosHtml += `<a href="${reg.comprobante_plataforma_url}" target="_blank" class="badge" style="text-decoration:none; border-color:var(--primary); color:var(--primary);" title="Comprobante Plataforma">Plataforma</a>`;
+                if (!adjuntosHtml) adjuntosHtml = '<span style="color:var(--text-muted); font-size:0.9em;">-</span>';
 
                 tr.innerHTML = `
                     <td style="white-space: nowrap;">${reg.fecha}</td>
-                    <td><strong>${reg.cliente || '-'}</strong></td>
-                    <td>${reg.descripcion}</td>
-                    <td><span class="badge">${reg.numero_factura || 'S/N'}</span></td>
-                    <td style="font-weight: 600;">₲${reg.monto.toLocaleString('es-PY')}</td>
-                    <td style="color: var(--text-muted);">₲${iva.toLocaleString('es-PY')}</td>
-                    <td style="color: var(--accent); font-weight: 600;">₲${neto.toLocaleString('es-PY')}</td>
-                    <td>${facturaHtml}</td>
+                    <td><strong>${reg.cliente || '-'}</strong><br><span style="font-size:0.8em; color:var(--text-muted);">${reg.fuente || ''}</span></td>
+                    <td>${reg.tipo_operacion || '-'}</td>
+                    <td style="font-weight: 600;">₲${reg.monto.toLocaleString('es-PY')} <br><span style="font-size:0.8em; color:var(--text-muted);">IVA: ₲${iva.toLocaleString('es-PY')}</span></td>
+                    <td style="color: var(--success); font-weight: 600;">₲${(reg.monto_banco || 0).toLocaleString('es-PY')}</td>
+                    <td>${adjuntosHtml}</td>
                     <td><button class="delete-btn" onclick="eliminarIngreso(${reg.id})" title="Eliminar">✕</button></td>
                 `;
                 tbody.appendChild(tr);
@@ -603,7 +634,7 @@
             registros.forEach(reg => {
                 const mes = reg.fecha.substring(0, 7); // Toma "YYYY-MM"
                 if (!resumen[mes]) resumen[mes] = { ingresos: 0, iva: 0, neto: 0 };
-                resumen[mes].ingresos += reg.monto;
+                resumen[mes].ingresos += reg.monto; // Bruto
                 const iva = Math.round(reg.monto / 11);
                 resumen[mes].iva += iva;
                 resumen[mes].neto += (reg.monto - iva);
@@ -677,21 +708,36 @@
             btn.textContent = 'Guardando en la nube...';
             
             let factura_url = null;
-            const facturaInput = document.getElementById('factura');
+            let comp_plat_url = null;
             
+            // Subir Factura DNIT
+            const facturaInput = document.getElementById('factura');
             if (facturaInput.files.length > 0) {
-                btn.textContent = 'Subiendo factura...';
+                btn.textContent = 'Subiendo factura DNIT...';
                 const file = facturaInput.files[0];
                 const fileExt = file.name.split('.').pop();
-                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                const fileName = `dnit_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
                 
                 const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
-                if (uploadError) {
-                    alert('Error subiendo factura. Verifica el Bucket.');
-                    btn.textContent = btnOriginalText; btn.disabled = false; return;
+                if (!uploadError) {
+                    const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
+                    factura_url = data.publicUrl;
                 }
-                const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
-                factura_url = data.publicUrl;
+            }
+
+            // Subir Comprobante Plataforma X4T
+            const compInput = document.getElementById('comprobante_plataforma');
+            if (compInput.files.length > 0) {
+                btn.textContent = 'Subiendo comprobante X4T...';
+                const file = compInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `x4t_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
+                if (!uploadError) {
+                    const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
+                    comp_plat_url = data.publicUrl;
+                }
             }
 
             btn.textContent = 'Guardando datos...';
@@ -700,14 +746,22 @@
                 cliente: document.getElementById('cliente').value,
                 descripcion: document.getElementById('descripcion').value,
                 numero_factura: document.getElementById('numero_factura').value,
-                monto: parseFloat(document.getElementById('monto').value),
-                factura_url: factura_url
+                monto: parseFloat(document.getElementById('monto').value) || 0,
+                factura_url: factura_url,
+                
+                // Nuevos campos Grok
+                tipo_operacion: document.getElementById('tipo_operacion').value,
+                fuente: document.getElementById('fuente').value,
+                monto_banco: parseFloat(document.getElementById('monto_banco').value) || 0,
+                comision_fija: parseFloat(document.getElementById('comision_fija').value) || 0,
+                comision_porcentaje: parseFloat(document.getElementById('comision_porcentaje').value) || 0,
+                comprobante_plataforma_url: comp_plat_url
             };
 
             const { error } = await supabase.from('impuestos').insert([payload]);
             btn.textContent = btnOriginalText; btn.disabled = false;
             
-            if (error) alert('Error al guardar. Verifica la consola.');
+            if (error) alert('Error al guardar. Asegúrate de haber ejecutado el SQL para las nuevas columnas.');
             else { e.target.reset(); cargarDatos(); }
         });
 
