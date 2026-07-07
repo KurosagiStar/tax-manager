@@ -533,19 +533,10 @@
                 <!-- Columna Izquierda: Formulario -->
                 <div>
                     <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
-                        <!-- Emisor -->
-                        <div class="form-group full-width"><h3 style="margin:0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (Emisor)</h3></div>
-                        <div class="form-group"><label>Nombre</label><input type="text" id="inv_emisor_nombre" placeholder="Ej. Richard Mareco" class="inv-input"></div>
-                        <div class="form-group"><label>Teléfono / Email</label><input type="text" id="inv_emisor_tel" placeholder="Ej. +595 982..." class="inv-input"></div>
                         
-                        <!-- Receptor -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Datos del Cliente</h3></div>
-                        <div class="form-group"><label>Nombre del Cliente</label><input type="text" id="inv_cliente_nombre" placeholder="Ej. Sebastian Rojas" class="inv-input"></div>
-                        <div class="form-group"><label>Teléfono / Email</label><input type="text" id="inv_cliente_tel" placeholder="Ej. +1 456..." class="inv-input"></div>
-
-                        <!-- Detalles -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Detalles del Servicio</h3></div>
-                        <div class="form-group"><label>Nº Invoice (Auto)</label><input type="text" id="inv_numero" readonly style="background:#e2e8f0;"></div>
+                        <!-- Detalles de Facturación -->
+                        <div class="form-group full-width"><h3 style="margin:0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Detalles de Facturación</h3></div>
+                        <div class="form-group"><label>Nº Invoice (Autogenerado)</label><input type="text" id="inv_numero" readonly style="background:#e2e8f0; font-family:monospace; font-weight:bold;"></div>
                         <div class="form-group"><label>Moneda</label><input type="text" id="inv_moneda" value="USDT" class="inv-input"></div>
                         
                         <div class="form-group"><label>Fecha Emisión</label><input type="date" id="inv_fecha" class="inv-input"></div>
@@ -555,9 +546,20 @@
                         <div class="form-group"><label>Cantidad / Tiempo</label><input type="text" id="inv_cantidad" value="1" class="inv-input"></div>
                         <div class="form-group"><label>Precio Unitario</label><input type="number" id="inv_precio" value="150" class="inv-input"></div>
 
+                        <!-- Emisor (Tú) -->
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (Proveedor / Tú)</h3></div>
+                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="inv_emisor_nombre" placeholder="Ej. Richard Mareco" class="inv-input"></div>
+                        <div class="form-group"><label>Tu Teléfono / Email</label><input type="text" id="inv_emisor_tel" placeholder="Ej. +595 982..." class="inv-input"></div>
+                        <div class="form-group full-width"><label>Tu Wallet (Donde recibes el pago para QR)</label><input type="text" id="inv_wallet" placeholder="Ej. 0xDfD5..." class="inv-input"></div>
+
+                        <!-- Receptor (Cliente) -->
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Datos del Cliente (El que paga)</h3></div>
+                        <div class="form-group"><label>Nombre del Cliente</label><input type="text" id="inv_cliente_nombre" placeholder="Ej. Sebastian Rojas" class="inv-input"></div>
+                        <div class="form-group"><label>Teléfono / Email</label><input type="text" id="inv_cliente_tel" placeholder="Ej. +1 456..." class="inv-input"></div>
+                        <div class="form-group full-width"><label>Wallet del Cliente (Desde donde envía)</label><input type="text" id="inv_cliente_wallet" placeholder="Ej. 0xABC1..." class="inv-input"></div>
+
                         <!-- Pago -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Información de Pago (Opcional)</h3></div>
-                        <div class="form-group full-width"><label>Wallet Address (Para QR)</label><input type="text" id="inv_wallet" placeholder="Ej. 0xDfD5..." class="inv-input"></div>
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Confirmación de Pago (Opcional)</h3></div>
                         <div class="form-group full-width"><label>TXID (Hash de Transacción)</label><input type="text" id="inv_txid" placeholder="Ej. 0xabc123..." class="inv-input"></div>
                     </div>
                     
@@ -583,9 +585,11 @@
                                     <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Description:</td><td id="pv_desc" style="border:none; color:#111;">-</td></tr>
                                 </table>
                             </div>
-                            <div style="text-align: right;">
-                                <strong id="pv_emisor_nombre" style="display:block; color:#111; font-size:1.1em; margin-bottom:5px;">-</strong>
-                                <span id="pv_emisor_tel" style="color:#777;">-</span>
+                            <div style="text-align: right; max-width: 250px;">
+                                <span style="color:#777; font-size:0.85em; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:5px;">Billed To:</span>
+                                <strong id="pv_cliente_nombre" style="display:block; color:#111; font-size:1.1em; margin-bottom:2px;">-</strong>
+                                <span id="pv_cliente_tel" style="color:#777; display:block; margin-bottom:2px;">-</span>
+                                <span id="pv_cliente_wallet" style="color:#777; display:block; font-size:0.8em; word-break: break-all;">-</span>
                             </div>
                         </div>
 
@@ -624,7 +628,7 @@
                                 <table style="border:none; font-size: 0.9em; margin:0; width:auto;">
                                     <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Currency:</td><td id="pv_pay_curr" style="border:none; color:#111;">USDT</td></tr>
                                     <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Amount:</td><td id="pv_pay_amt" style="border:none; color:#111;">-</td></tr>
-                                    <tr id="pv_wallet_row" style="display:none;"><td style="color:#777; padding:3px 15px 3px 0; border:none;">Address:</td><td id="pv_pay_wallet" style="border:none; color:#111; word-break: break-all;">-</td></tr>
+                                    <tr id="pv_wallet_row" style="display:none;"><td style="color:#777; padding:3px 15px 3px 0; border:none;">Pay to Address:</td><td id="pv_pay_wallet" style="border:none; color:#111; word-break: break-all;">-</td></tr>
                                     <tr id="pv_txid_row" style="display:none;"><td style="color:#777; padding:3px 15px 3px 0; border:none;">TXID:</td><td id="pv_pay_txid" style="border:none; color:#111; word-break: break-all; font-size:0.85em;">-</td></tr>
                                 </table>
                             </div>
@@ -634,10 +638,10 @@
                         </div>
 
                         <div style="border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px;">
-                            <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Client Information</h3>
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Supplier Information</h3>
                             <table style="border:none; font-size: 0.9em; margin:0; width:auto;">
-                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Full Name:</td><td id="pv_cliente_nombre" style="border:none; color:#111;">-</td></tr>
-                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Contact:</td><td id="pv_cliente_tel" style="border:none; color:#111;">-</td></tr>
+                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Full Name:</td><td id="pv_emisor_nombre" style="border:none; color:#111;">-</td></tr>
+                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Contact:</td><td id="pv_emisor_tel" style="border:none; color:#111;">-</td></tr>
                             </table>
                         </div>
 
@@ -774,7 +778,7 @@
             }
 
             if (invReq.error) {
-                tbodyInv.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--danger);">Ejecute el script SQL para Invoices.</td></tr>`;
+                tbodyInv.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);">Ejecute el script SQL para Invoices.</td></tr>`;
             } else {
                 historyInvoices = invReq.data || [];
             }
@@ -920,20 +924,10 @@
         }
 
         function prepararNuevoInvoice() {
-            // Generar nuevo numero consecutivo
-            let nextNum = 1;
-            if (historyInvoices.length > 0) {
-                // extraemos numero del texto ej "INV-0001" o "A-0001"
-                const latest = historyInvoices[0].invoice_number;
-                const matches = latest.match(/\d+$/);
-                if (matches) {
-                    nextNum = parseInt(matches[0]) + 1;
-                } else {
-                    nextNum = historyInvoices.length + 1;
-                }
-            }
-            const invNum = 'A-' + String(nextNum).padStart(6, '0');
-            document.getElementById('inv_numero').value = invNum;
+            // Generar numero profesional: INV-YYYYMM-XXXX
+            const dateStr = new Date().toISOString().substring(0, 7).replace('-', '');
+            const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase();
+            document.getElementById('inv_numero').value = `INV-${dateStr}-${randomHex}`;
 
             // Fechas
             if (!document.getElementById('inv_fecha').value) {
@@ -946,6 +940,7 @@
             if (historyInvoices.length > 0 && !document.getElementById('inv_emisor_nombre').value) {
                 document.getElementById('inv_emisor_nombre').value = historyInvoices[0].emisor_nombre || '';
                 document.getElementById('inv_emisor_tel').value = historyInvoices[0].emisor_telefono || '';
+                document.getElementById('inv_wallet').value = historyInvoices[0].wallet_address || '';
             }
 
             actualizarVistaPrevia();
@@ -960,11 +955,14 @@
             t('pv_vencimiento', v('inv_vencimiento'));
             t('pv_desc', v('inv_descripcion'));
             
+            // Proveedor (Tú) - Va abajo a la izquierda en el PDF
             t('pv_emisor_nombre', v('inv_emisor_nombre'));
             t('pv_emisor_tel', v('inv_emisor_tel'));
             
+            // Cliente (El que paga) - Va arriba a la derecha en el PDF
             t('pv_cliente_nombre', v('inv_cliente_nombre'));
             t('pv_cliente_tel', v('inv_cliente_tel'));
+            t('pv_cliente_wallet', v('inv_cliente_wallet'));
 
             t('pv_item_desc', v('inv_descripcion'));
             t('pv_item_qty', v('inv_cantidad'));
@@ -1023,6 +1021,7 @@
                 emisor_telefono: v('inv_emisor_tel'),
                 receptor_nombre: v('inv_cliente_nombre'),
                 receptor_telefono: v('inv_cliente_tel'),
+                cliente_wallet: v('inv_cliente_wallet'),
                 fecha_emision: v('inv_fecha'),
                 fecha_vencimiento: v('inv_vencimiento'),
                 descripcion: v('inv_descripcion'),
@@ -1036,7 +1035,7 @@
             const { error } = await supabase.from('invoices').insert([payload]);
             if (error) {
                 console.error(error);
-                alert('No se pudo guardar en la nube. ¿Ejecutaste el script SQL para la tabla invoices?');
+                alert('No se pudo guardar en la nube. ¿Actualizaste la tabla invoices con los nuevos campos?');
                 return;
             }
 
