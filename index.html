@@ -357,6 +357,10 @@
                         <div class="form-group">
                             <label>Cliente / País</label>
                             <input type="text" id="cliente" required placeholder="Ej. Juan Pérez - Paraguay">
+                            <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="exento_iva" style="width: auto; margin: 0;">
+                                <label for="exento_iva" style="margin: 0; text-transform: none; font-weight: normal; cursor: pointer;">Exonerar IVA (Exterior)</label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Tipo de Operación</label>
@@ -628,7 +632,7 @@
 
             registros.forEach((reg) => {
                 total += reg.monto;
-                const iva = Math.round(reg.monto / 11); 
+                const iva = reg.exento_iva ? 0 : Math.round(reg.monto / 11); 
 
                 const tr = document.createElement('tr');
                 
@@ -641,7 +645,7 @@
                     <td style="white-space: nowrap;">${reg.fecha}</td>
                     <td><strong>${reg.cliente || '-'}</strong><br><span style="font-size:0.85em; color:var(--text-muted);">${reg.fuente || ''}</span></td>
                     <td>${reg.tipo_operacion || '-'}</td>
-                    <td style="font-weight: 600;">₲${reg.monto.toLocaleString('es-PY')} <br><span style="font-size:0.85em; color:var(--text-muted); font-weight:normal;">IVA: ₲${iva.toLocaleString('es-PY')}</span></td>
+                    <td style="font-weight: 600;">₲${reg.monto.toLocaleString('es-PY')} <br><span style="font-size:0.85em; color:var(--text-muted); font-weight:normal;">IVA: ${reg.exento_iva ? '<span style="color:var(--success);">Exento</span>' : '₲' + iva.toLocaleString('es-PY')}</span></td>
                     <td style="color: var(--success); font-weight: 600;">₲${(reg.monto_banco || 0).toLocaleString('es-PY')}</td>
                     <td>${adjuntosHtml}</td>
                     <td><button class="delete-btn" onclick="eliminarIngreso(${reg.id})" title="Eliminar Asiento">✕</button></td>
@@ -660,7 +664,7 @@
                 const mes = reg.fecha.substring(0, 7); 
                 if (!resumen[mes]) resumen[mes] = { ingresos: 0, iva: 0, neto: 0 };
                 resumen[mes].ingresos += reg.monto; 
-                const iva = Math.round(reg.monto / 11);
+                const iva = reg.exento_iva ? 0 : Math.round(reg.monto / 11);
                 resumen[mes].iva += iva;
                 resumen[mes].neto += (reg.monto - iva);
             });
@@ -777,7 +781,8 @@
                 monto_banco: parseFloat(document.getElementById('monto_banco').value) || 0,
                 comision_fija: parseFloat(document.getElementById('comision_fija').value) || 0,
                 comision_porcentaje: parseFloat(document.getElementById('comision_porcentaje').value) || 0,
-                comprobante_plataforma_url: comp_plat_url
+                comprobante_plataforma_url: comp_plat_url,
+                exento_iva: document.getElementById('exento_iva').checked
             };
 
             const { error } = await supabase.from('impuestos').insert([payload]);
