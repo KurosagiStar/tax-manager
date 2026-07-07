@@ -571,7 +571,7 @@
                     <h2 style="margin-top: 0;">Vista Previa en Vivo</h2>
                     <div id="invoice-preview" class="preview-pane">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
-                            <h1 style="font-size: 2.5em; font-weight: bold; color: #111; margin: 0; border:none;">Invoice</h1>
+                            <h1 style="font-size: 2.5em; font-weight: bold; color: #111; margin: 0; border:none;">FACTURA</h1>
                         </div>
                         
                         <div style="border-top: 1px solid #eaeaea; margin-bottom: 30px;"></div>
@@ -579,14 +579,14 @@
                         <div style="display: flex; justify-content: space-between; margin-bottom: 40px; font-size: 0.9em;">
                             <div>
                                 <table style="border:none; margin:0; width:auto;">
-                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Invoice number:</td><td id="pv_numero" style="border:none; font-weight:bold; color:#111;">-</td></tr>
-                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Issue date:</td><td id="pv_fecha" style="border:none; color:#111;">-</td></tr>
-                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Due date:</td><td id="pv_vencimiento" style="border:none; color:#111;">-</td></tr>
-                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Description:</td><td id="pv_desc" style="border:none; color:#111;">-</td></tr>
+                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Nº de Factura:</td><td id="pv_numero" style="border:none; font-weight:bold; color:#111;">-</td></tr>
+                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Fecha Emisión:</td><td id="pv_fecha" style="border:none; color:#111;">-</td></tr>
+                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Vencimiento:</td><td id="pv_vencimiento" style="border:none; color:#111;">-</td></tr>
+                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Descripción:</td><td id="pv_desc" style="border:none; color:#111;">-</td></tr>
                                 </table>
                             </div>
                             <div style="text-align: right; max-width: 250px;">
-                                <span style="color:#777; font-size:0.85em; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:5px;">Billed To:</span>
+                                <span style="color:#777; font-size:0.85em; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:5px;">Facturado a:</span>
                                 <strong id="pv_cliente_nombre" style="display:block; color:#111; font-size:1.1em; margin-bottom:2px;">-</strong>
                                 <span id="pv_cliente_tel" style="color:#777; display:block; margin-bottom:2px;">-</span>
                                 <span id="pv_cliente_wallet" style="color:#777; display:block; font-size:0.8em; word-break: break-all;">-</span>
@@ -596,9 +596,9 @@
                         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                             <thead>
                                 <tr style="background: #fafafa; border-bottom: 2px solid #eaeaea;">
-                                    <th style="padding: 12px; text-align: left; color: #333; font-weight: bold; border:none;">Item</th>
-                                    <th style="padding: 12px; text-align: left; color: #333; font-weight: bold; border:none;">Quantity</th>
-                                    <th style="padding: 12px; text-align: right; color: #333; font-weight: bold; border:none;">Price</th>
+                                    <th style="padding: 12px; text-align: left; color: #333; font-weight: bold; border:none;">Concepto</th>
+                                    <th style="padding: 12px; text-align: left; color: #333; font-weight: bold; border:none;">Cantidad</th>
+                                    <th style="padding: 12px; text-align: right; color: #333; font-weight: bold; border:none;">Precio</th>
                                     <th style="padding: 12px; text-align: right; color: #333; font-weight: bold; border:none;">Total</th>
                                 </tr>
                             </thead>
@@ -615,8 +615,8 @@
                         <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
                             <table style="width: 300px; border:none;">
                                 <tr><td style="padding: 5px; color:#777; border:none;">Subtotal:</td><td id="pv_subtotal" style="padding: 5px; text-align: right; font-weight:bold; border:none; color:#111;">-</td></tr>
-                                <tr><td style="padding: 5px; color:#777; border:none;">Discount (%):</td><td style="padding: 5px; text-align: right; font-weight:bold; border:none; color:#111;">0</td></tr>
-                                <tr><td style="padding: 5px; color:#777; border:none;">VAT (%):</td><td style="padding: 5px; text-align: right; font-weight:bold; border:none; color:#111;">0</td></tr>
+                                <tr><td style="padding: 5px; color:#777; border:none;">Descuento (%):</td><td style="padding: 5px; text-align: right; font-weight:bold; border:none; color:#111;">0</td></tr>
+                                <tr><td style="padding: 5px; color:#777; border:none;">IVA (%):</td><td style="padding: 5px; text-align: right; font-weight:bold; border:none; color:#111;">0</td></tr>
                                 <tr style="background: #eafff5;"><td style="padding: 10px 5px; font-weight:bold; color:#111; border:none;">Total:</td><td id="pv_total_final" style="padding: 10px 5px; text-align: right; font-weight:bold; color: #0f766e; border:none;">-</td></tr>
                             </table>
                         </div>
@@ -624,11 +624,11 @@
                         <!-- Bloques de Información -->
                         <div style="border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Payment Information</h3>
+                                <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Información de Pago</h3>
                                 <table style="border:none; font-size: 0.9em; margin:0; width:auto;">
-                                    <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Currency:</td><td id="pv_pay_curr" style="border:none; color:#111;">USDT</td></tr>
-                                    <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Amount:</td><td id="pv_pay_amt" style="border:none; color:#111;">-</td></tr>
-                                    <tr id="pv_wallet_row" style="display:none;"><td style="color:#777; padding:3px 15px 3px 0; border:none;">Pay to Address:</td><td id="pv_pay_wallet" style="border:none; color:#111; word-break: break-all;">-</td></tr>
+                                    <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Moneda:</td><td id="pv_pay_curr" style="border:none; color:#111;">USDT</td></tr>
+                                    <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Monto a pagar:</td><td id="pv_pay_amt" style="border:none; color:#111;">-</td></tr>
+                                    <tr id="pv_wallet_row" style="display:none;"><td style="color:#777; padding:3px 15px 3px 0; border:none;">Billetera (Recibe):</td><td id="pv_pay_wallet" style="border:none; color:#111; word-break: break-all;">-</td></tr>
                                     <tr id="pv_txid_row" style="display:none;"><td style="color:#777; padding:3px 15px 3px 0; border:none;">TXID:</td><td id="pv_pay_txid" style="border:none; color:#111; word-break: break-all; font-size:0.85em;">-</td></tr>
                                 </table>
                             </div>
@@ -638,10 +638,10 @@
                         </div>
 
                         <div style="border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px;">
-                            <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Supplier Information</h3>
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Información del Proveedor</h3>
                             <table style="border:none; font-size: 0.9em; margin:0; width:auto;">
-                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Full Name:</td><td id="pv_emisor_nombre" style="border:none; color:#111;">-</td></tr>
-                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Contact:</td><td id="pv_emisor_tel" style="border:none; color:#111;">-</td></tr>
+                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Nombre Completo:</td><td id="pv_emisor_nombre" style="border:none; color:#111;">-</td></tr>
+                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Contacto:</td><td id="pv_emisor_tel" style="border:none; color:#111;">-</td></tr>
                             </table>
                         </div>
 
