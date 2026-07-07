@@ -546,17 +546,17 @@
                         <div class="form-group"><label>Cantidad / Tiempo</label><input type="text" id="inv_cantidad" value="1" class="inv-input"></div>
                         <div class="form-group"><label>Precio Unitario</label><input type="number" id="inv_precio" value="150" class="inv-input"></div>
 
-                        <!-- Emisor (Tú) -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (Emisor del Documento)</h3></div>
-                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="inv_emisor_nombre" placeholder="Ej. Richard Mareco" class="inv-input"></div>
-                        <div class="form-group"><label>Tu Teléfono / Email</label><input type="text" id="inv_emisor_tel" placeholder="Ej. +595 982..." class="inv-input"></div>
-                        <div class="form-group full-width"><label>Tu Wallet (De donde salen los fondos)</label><input type="text" id="inv_wallet" placeholder="Ej. 0xDfD5..." class="inv-input"></div>
+                        <!-- Emisor (Tu Compañero) -->
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Datos de tu Compañero (Emisor / Quien cobra)</h3></div>
+                        <div class="form-group"><label>Nombre del Proveedor</label><input type="text" id="inv_emisor_nombre" placeholder="Ej. Sebastian Rojas" class="inv-input"></div>
+                        <div class="form-group"><label>Teléfono / Email</label><input type="text" id="inv_emisor_tel" placeholder="Ej. +1 456..." class="inv-input"></div>
+                        <div class="form-group full-width"><label>Wallet del Proveedor (Donde recibe el pago para QR)</label><input type="text" id="inv_wallet" placeholder="Ej. 0xABC1..." class="inv-input"></div>
 
-                        <!-- Receptor (Compañero) -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Datos del Compañero (Proveedor / Recibe)</h3></div>
-                        <div class="form-group"><label>Nombre del Proveedor</label><input type="text" id="inv_cliente_nombre" placeholder="Ej. Sebastian Rojas" class="inv-input"></div>
-                        <div class="form-group"><label>Teléfono / Email</label><input type="text" id="inv_cliente_tel" placeholder="Ej. +1 456..." class="inv-input"></div>
-                        <div class="form-group full-width"><label>Wallet del Proveedor (Para el QR de Pago)</label><input type="text" id="inv_cliente_wallet" placeholder="Ej. 0xABC1..." class="inv-input"></div>
+                        <!-- Receptor (Tú) -->
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (Tú eres el Cliente que paga)</h3></div>
+                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="inv_cliente_nombre" placeholder="Ej. Richard Mareco" class="inv-input"></div>
+                        <div class="form-group"><label>Tu Teléfono / Email</label><input type="text" id="inv_cliente_tel" placeholder="Ej. +595 982..." class="inv-input"></div>
+                        <div class="form-group full-width"><label>Tu Wallet (De donde envías los fondos)</label><input type="text" id="inv_cliente_wallet" placeholder="Ej. 0xDfD5..." class="inv-input"></div>
 
                         <!-- Pago -->
                         <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Confirmación de Pago (Opcional)</h3></div>
@@ -979,7 +979,7 @@
             t('pv_pay_curr', moneda);
             t('pv_pay_amt', precioTxt);
 
-            const wallet = v('inv_cliente_wallet');
+            const wallet = v('inv_wallet');
             if (wallet) {
                 document.getElementById('pv_wallet_row').style.display = 'table-row';
                 t('pv_pay_wallet', wallet);
