@@ -370,6 +370,10 @@
                             <label>Correo Aceptación (PDF)</label>
                             <input type="file" id="correo_pdf" accept=".pdf">
                         </div>
+                        <div class="form-group">
+                            <label>Recibo / Comprobante (PDF)</label>
+                            <input type="file" id="recibo_pdf" accept=".pdf,image/*">
+                        </div>
                     </div>
                     <button type="submit" class="btn-primary" style="margin-top: 15px;">Registrar en el Libro</button>
                 </form>
@@ -583,7 +587,8 @@
                 let adjuntosHtml = '';
                 if (reg.factura_url) adjuntosHtml += `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; margin-right:5px;" title="Factura DNIT">Factura</a>`;
                 if (reg.comprobante_plataforma_url) adjuntosHtml += `<a href="${reg.comprobante_plataforma_url}" target="_blank" class="badge success" style="text-decoration:none; margin-right:5px;" title="Contrato">Contrato</a>`;
-                if (reg.fuente && reg.fuente.startsWith('http')) adjuntosHtml += `<a href="${reg.fuente}" target="_blank" class="badge warning" style="text-decoration:none;" title="Correo de Aceptación">Correo</a>`;
+                if (reg.fuente && reg.fuente.startsWith('http')) adjuntosHtml += `<a href="${reg.fuente}" target="_blank" class="badge warning" style="text-decoration:none; margin-right:5px;" title="Correo de Aceptación">Correo</a>`;
+                if (reg.numero_factura && reg.numero_factura.startsWith('http')) adjuntosHtml += `<a href="${reg.numero_factura}" target="_blank" class="badge danger" style="text-decoration:none; margin-right:5px; background:#f3e8ff; color:#7e22ce; border-color:#d8b4fe;" title="Recibo/Comprobante">Recibo</a>`;
                 if (!adjuntosHtml) adjuntosHtml = '<span style="color:var(--text-muted); font-size:0.9em;">Sin Adjuntos</span>';
 
                 tr.innerHTML = `
@@ -699,12 +704,27 @@
                 }
             }
 
+            let recibo_url = null;
+            const reciboInput = document.getElementById('recibo_pdf');
+            if (reciboInput.files.length > 0) {
+                btn.textContent = 'Subiendo recibo...';
+                const file = reciboInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `recibo_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
+                if (!uploadError) {
+                    const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
+                    recibo_url = data.publicUrl;
+                }
+            }
+
             btn.textContent = 'Registrando Asiento...';
             const payload = {
                 fecha: document.getElementById('fecha').value,
                 cliente: '-',
                 descripcion: document.getElementById('descripcion').value,
-                numero_factura: '-',
+                numero_factura: recibo_url || '-',
                 monto: 0,
                 factura_url: factura_url,
                 contrato_id: null,
