@@ -341,8 +341,6 @@
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('tab-ingresos', this)">Libro de Ingresos</button>
             <button class="tab-btn" onclick="switchTab('tab-declaraciones', this)">Declaraciones Mensuales</button>
-            <button class="tab-btn" onclick="switchTab('tab-invoice', this)">Generador de Invoice</button>
-            <button class="tab-btn" onclick="switchTab('tab-contratos', this)">Generador de Contratos</button>
         </div>
 
         <!-- PESTAÑA: INGRESOS -->
@@ -402,6 +400,12 @@
 
                         <!-- Detalles -->
                         <div class="form-group">
+                            <label>Contrato Asociado</label>
+                            <select id="contrato_id">
+                                <option value="">Ninguno</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>Número de Factura / CDC</label>
                             <input type="text" id="numero_factura" placeholder="Ej. 001-001-0000001">
                         </div>
@@ -423,6 +427,109 @@
                     <button type="submit" class="btn-primary">Registrar en el Libro</button>
                 </form>
             </div>
+                <details style="margin-top: 35px; background: #fff; border: 1px solid var(--border); border-radius: 4px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <summary style="font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); font-size: 1.1em; list-style: none;">
+                        <span style="margin-right: 10px;">📑</span> Generador de Contratos (Opcional)
+                    </summary>
+                    <div style="margin-top: 25px; border-top: 1px solid var(--border); padding-top: 25px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <!-- Formulario -->
+                <div>
+                    <h2 style="margin-top: 0;">Datos del Contrato</h2>
+                    <form id="contratoForm" class="form-grid" style="grid-template-columns: 1fr; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
+                        <div class="form-group"><label>Nº Contrato</label><input type="text" id="ct_numero" readonly style="background:#e2e8f0; font-family:monospace; font-weight:bold;"></div>
+                        <div class="form-group"><label>Fecha</label><input type="date" id="ct_fecha" class="ct-input"></div>
+                        
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Contratante (Cliente)</h3></div>
+                        <div class="form-group"><label>Nombre / Razón Social</label><input type="text" id="ct_cliente_nombre" class="ct-input" placeholder="Ej. Sebastian Rojas"></div>
+                        <div class="form-group"><label>Documento (Pasaporte/DNI)</label><input type="text" id="ct_cliente_doc" class="ct-input"></div>
+                        <div class="form-group"><label>Nacionalidad</label><input type="text" id="ct_cliente_nac" class="ct-input"></div>
+                        <div class="form-group"><label>Domicilio (Ciudad y País)</label><input type="text" id="ct_cliente_dom" class="ct-input"></div>
+
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (El Contratado)</h3></div>
+                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="ct_mi_nombre" value="Richard Herminio Mareco Amarilla" class="ct-input"></div>
+                        <div class="form-group"><label>RUC</label><input type="text" id="ct_mi_ruc" value="-" class="ct-input"></div>
+                        <div class="form-group"><label>Domicilio</label><input type="text" id="ct_mi_dom" value="Asunción, Paraguay" class="ct-input"></div>
+
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Proyecto</h3></div>
+                        <div class="form-group full-width"><label>Descripción General</label><textarea id="ct_proy_desc" rows="3" class="ct-input" style="width:100%; border:1px solid var(--border); padding:8px; border-radius:4px;" placeholder="Ej. Herramienta de Editor de Unity para detectar y eliminar blendshapes vacíos..."></textarea></div>
+                        <div class="form-group full-width"><label>Funcionalidades (separadas por línea)</label><textarea id="ct_proy_func" rows="3" class="ct-input" style="width:100%; border:1px solid var(--border); padding:8px; border-radius:4px;"></textarea></div>
+                        <div class="form-group full-width"><label>Requisitos Técnicos</label><input type="text" id="ct_proy_req" class="ct-input" placeholder="Ej. Unity 2022.3 LTS, C#"></div>
+                        <div class="form-group full-width"><label>Entregables</label><input type="text" id="ct_proy_ent" class="ct-input" placeholder="Ej. Paquete .unitypackage"></div>
+                        <div class="form-group full-width"><label>Fuera de Alcance</label><input type="text" id="ct_proy_out" class="ct-input" placeholder="Ej. Soporte post-venta, modificaciones estructurales"></div>
+                        <div class="form-group"><label>Plazo Entrega (Días)</label><input type="number" id="ct_plazo" value="15" class="ct-input"></div>
+                        <div class="form-group"><label>Medio Entrega</label><input type="text" id="ct_medio" value="Repositorio Git Privado" class="ct-input"></div>
+
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Pagos</h3></div>
+                        <div class="form-group"><label>Monto (USDT)</label><input type="number" id="ct_monto" class="ct-input"></div>
+                        <div class="form-group"><label>Monto en Letras</label><input type="text" id="ct_monto_letras" class="ct-input" placeholder="Ej. Mil Doscientos"></div>
+                        <div class="form-group"><label>Tu Wallet/Binance Pay ID</label><input type="text" id="ct_wallet" class="ct-input"></div>
+                        <div class="form-group"><label>Red</label><select id="ct_red" class="ct-input"><option value="TRC20">TRC20</option><option value="BEP20">BEP20</option><option value="ERC20">ERC20</option></select></div>
+
+                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Condiciones Generales</h3></div>
+                        <div class="form-group"><label>Días de Pago (tras entrega)</label><input type="number" id="ct_dias_pago" value="3" class="ct-input"></div>
+                        <div class="form-group"><label>Días de Revisión</label><input type="number" id="ct_dias_rev" value="5" class="ct-input"></div>
+                        <div class="form-group"><label>Rondas Ajuste</label><input type="number" id="ct_rondas" value="2" class="ct-input"></div>
+                        <div class="form-group"><label>Garantía Bugs (Días)</label><input type="number" id="ct_garantia" value="15" class="ct-input"></div>
+                        <div class="form-group"><label>Preaviso Rescisión (Días)</label><input type="number" id="ct_preaviso" value="15" class="ct-input"></div>
+                        <div class="form-group"><label>Ciudad Jurisdicción</label><input type="text" id="ct_ciudad" value="Asunción" class="ct-input"></div>
+                    </form>
+                    <div style="display: flex; gap: 10px; margin-top:20px;">
+                            <button type="button" class="btn-primary" onclick="guardarContratoBD()">💾 Guardar Contrato en la Nube</button>
+                            <button type="button" class="btn-success" id="btnDescargarContrato" onclick="descargarContratoPDF()">📄 Descargar PDF</button>
+                        </div>
+                </div>
+                
+                <!-- Vista Previa -->
+                <div>
+                    <h2 style="margin-top: 0;">Vista Previa del Contrato</h2>
+                    <div id="contract-preview" class="preview-pane" style="font-size: 11px; line-height: 1.5; text-align: justify; height: 70vh; overflow-y: auto;">
+                        <h2 style="text-align: center; text-decoration: underline; margin-bottom: 20px; font-size: 16px;">CONTRATO DE PRESTACIÓN DE SERVICIOS FREELANCE</h2>
+                        <p>Conste por el presente documento, el Contrato de Prestación de Servicios que celebran por una parte, <strong class="cv_mi_nombre">-</strong>, con RUC N° <strong class="cv_mi_ruc">-</strong> y domicilio en <strong class="cv_mi_dom">-</strong> (en adelante, "EL CONTRATADO"); y por la otra parte, <strong class="cv_cliente_nombre">-</strong>, con documento de identidad N° <strong class="cv_cliente_doc">-</strong>, de nacionalidad <strong class="cv_cliente_nac">-</strong> y domicilio en <strong class="cv_cliente_dom">-</strong> (en adelante, "EL CONTRATANTE"), de acuerdo a los siguientes términos y condiciones:</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">PRIMERA: OBJETO</h3>
+                        <p>El presente contrato tiene por objeto la prestación de servicios profesionales de programación por parte de EL CONTRATADO, consistentes en el desarrollo, implementación y/o mantenimiento de scripts y herramientas de software para el motor Unity, orientadas a la optimización de modelos 3D (en adelante, "el Proyecto"), conforme a las especificaciones detalladas en el Anexo I del presente contrato.</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">SEGUNDA: ALCANCE DE LOS SERVICIOS</h3>
+                        <p>Los servicios comprendidos en este contrato incluyen el desarrollo de las funcionalidades listadas en el Anexo I. Cualquier funcionalidad no especificada será considerada un adicional, sujeto a nueva cotización y acuerdo por escrito entre las partes.</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">TERCERA: PLAZO DE EJECUCIÓN Y FORMA DE TRABAJO</h3>
+                        <p>EL CONTRATADO se compromete a entregar el Proyecto en un plazo de <strong class="cv_plazo">-</strong> días, contados a partir de la firma del presente. La entrega se realizará de manera digital mediante <strong class="cv_medio">-</strong>. EL CONTRATADO actuará como profesional independiente utilizando sus propios equipos y herramientas.</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">CUARTA: HONORARIOS Y FORMA DE PAGO</h3>
+                        <p>En contraprestación, EL CONTRATANTE abonará a EL CONTRATADO la suma total de <strong>USDT <span class="cv_monto">-</span> (<span class="cv_monto_letras">-</span>)</strong>, mediante un único pago contra la entrega final y aceptación del Proyecto. No se contemplan anticipos ni pagos parciales.<br>
+                        El pago se realizará exclusivamente en criptomoneda USDT, mediante transferencia a la dirección/ID de EL CONTRATADO: <strong class="cv_wallet">-</strong> en la red <strong class="cv_red">-</strong>. Las comisiones de red ("gas fees") correrán por cuenta del CONTRATANTE.<br>
+                        El pago deberá efectuarse dentro de los <strong class="cv_dias_pago">-</strong> días posteriores a la entrega y aceptación. Se considerará cumplida la obligación en el momento en que la transacción quede confirmada en la blockchain, debiendo remitir el TXID como comprobante.</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">QUINTA: ACEPTACIÓN, REVISIONES Y GARANTÍA</h3>
+                        <p>Una vez entregado el proyecto, EL CONTRATANTE contará con un plazo de <strong class="cv_dias_rev">-</strong> días hábiles para revisión. El contrato incluye hasta <strong class="cv_rondas">-</strong> rondas de ajustes menores sin costo adicional que no impliquen cambios sustanciales al alcance definido en el Anexo I.<br>
+                        EL CONTRATADO garantiza la corrección de errores (bugs) atribuibles a su desarrollo por un período de <strong class="cv_garantia">-</strong> días posteriores a la entrega final.</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">SEXTA: PROPIEDAD INTELECTUAL</h3>
+                        <p>Únicamente tras la confirmación del pago total estipulado en la Cláusula Cuarta, EL CONTRATANTE adquirirá la titularidad plena y exclusiva sobre el código fuente y los scripts desarrollados específicamente para el Proyecto. Quedan excluidos de esta cesión el conocimiento técnico general (know-how) y utilidades previas de EL CONTRATADO.</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">SÉPTIMA: IMPUESTOS Y OBLIGACIONES FISCALES</h3>
+                        <p>Cada parte será exclusivamente responsable de liquidar los impuestos que correspondan en su país de residencia. EL CONTRATADO, como contribuyente paraguayo, emitirá el comprobante de venta legal ante la DNIT de la República del Paraguay por los montos percibidos. EL CONTRATANTE no asume responsabilidad tributaria alguna en Paraguay.</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">OCTAVA: CONFIDENCIALIDAD</h3>
+                        <p>EL CONTRATADO se compromete a mantener confidencialidad respecto de la información técnica o comercial a la que acceda con motivo del presente contrato, no pudiendo divulgarla a terceros sin autorización expresa de EL CONTRATANTE.</p>
+
+                        <h3 style="font-size: 12px; margin-top: 15px;">NOVENA: RESCISIÓN Y JURISDICCIÓN</h3>
+                        <p>Cualquiera de las partes podrá rescindir el contrato mediante comunicación escrita con <strong class="cv_preaviso">-</strong> días de anticipación. En caso de rescisión, se abonará la parte proporcional de los trabajos efectivamente realizados y aceptados.<br>
+                        Para cualquier controversia, las partes se someten a la jurisdicción de los Tribunales Ordinarios de la ciudad de <strong class="cv_ciudad">-</strong>, República del Paraguay.</p>
+
+                        <p style="margin-top:20px;">En prueba de conformidad, las partes firman el presente contrato en el lugar y fecha indicados.</p>
+                        <p>Firmado en fecha: <strong class="cv_fecha">-</strong></p>
+                        
+                        <div style="display:flex; justify-content:space-between; margin-top:40px;">
+                            <div style="text-align:center; border-top:1px solid #333; padding-top:10px; width:45%;">
+                                EL CONTRATANTE<br><span class="cv_cliente_nombre">-</span><br>Doc. N° <span class="cv_cliente_doc">-</span>
+                            </div>
+                            <div style="text-align:center; border-top:1px solid #333; padding-top:10px; width:45%;">
+                                EL CONTRATADO<br><span class="cv_mi_nombre">-</span><br>RUC N° <span class="cv_mi_ruc">-</span>
+                            
+                    </div>
+                </details>
 
             <div style="margin-top: 40px;">
                 <h2>Asientos de Ingresos</h2>
@@ -672,103 +779,6 @@
             </div>
         </div>
 
-        <!-- PESTAÑA: CONTRATOS -->
-        <div id="tab-contratos" class="tab-content">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                <!-- Formulario -->
-                <div>
-                    <h2 style="margin-top: 0;">Datos del Contrato</h2>
-                    <form id="contratoForm" class="form-grid" style="grid-template-columns: 1fr; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
-                        <div class="form-group"><label>Nº Contrato</label><input type="text" id="ct_numero" readonly style="background:#e2e8f0; font-family:monospace; font-weight:bold;"></div>
-                        <div class="form-group"><label>Fecha</label><input type="date" id="ct_fecha" class="ct-input"></div>
-                        
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Contratante (Cliente)</h3></div>
-                        <div class="form-group"><label>Nombre / Razón Social</label><input type="text" id="ct_cliente_nombre" class="ct-input" placeholder="Ej. Sebastian Rojas"></div>
-                        <div class="form-group"><label>Documento (Pasaporte/DNI)</label><input type="text" id="ct_cliente_doc" class="ct-input"></div>
-                        <div class="form-group"><label>Nacionalidad</label><input type="text" id="ct_cliente_nac" class="ct-input"></div>
-                        <div class="form-group"><label>Domicilio (Ciudad y País)</label><input type="text" id="ct_cliente_dom" class="ct-input"></div>
-
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (El Contratado)</h3></div>
-                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="ct_mi_nombre" value="Richard Herminio Mareco Amarilla" class="ct-input"></div>
-                        <div class="form-group"><label>RUC</label><input type="text" id="ct_mi_ruc" value="-" class="ct-input"></div>
-                        <div class="form-group"><label>Domicilio</label><input type="text" id="ct_mi_dom" value="Asunción, Paraguay" class="ct-input"></div>
-
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Proyecto</h3></div>
-                        <div class="form-group full-width"><label>Descripción General</label><textarea id="ct_proy_desc" rows="3" class="ct-input" style="width:100%; border:1px solid var(--border); padding:8px; border-radius:4px;" placeholder="Ej. Herramienta de Editor de Unity para detectar y eliminar blendshapes vacíos..."></textarea></div>
-                        <div class="form-group full-width"><label>Funcionalidades (separadas por línea)</label><textarea id="ct_proy_func" rows="3" class="ct-input" style="width:100%; border:1px solid var(--border); padding:8px; border-radius:4px;"></textarea></div>
-                        <div class="form-group full-width"><label>Requisitos Técnicos</label><input type="text" id="ct_proy_req" class="ct-input" placeholder="Ej. Unity 2022.3 LTS, C#"></div>
-                        <div class="form-group full-width"><label>Entregables</label><input type="text" id="ct_proy_ent" class="ct-input" placeholder="Ej. Paquete .unitypackage"></div>
-                        <div class="form-group full-width"><label>Fuera de Alcance</label><input type="text" id="ct_proy_out" class="ct-input" placeholder="Ej. Soporte post-venta, modificaciones estructurales"></div>
-                        <div class="form-group"><label>Plazo Entrega (Días)</label><input type="number" id="ct_plazo" value="15" class="ct-input"></div>
-                        <div class="form-group"><label>Medio Entrega</label><input type="text" id="ct_medio" value="Repositorio Git Privado" class="ct-input"></div>
-
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Pagos</h3></div>
-                        <div class="form-group"><label>Monto (USDT)</label><input type="number" id="ct_monto" class="ct-input"></div>
-                        <div class="form-group"><label>Monto en Letras</label><input type="text" id="ct_monto_letras" class="ct-input" placeholder="Ej. Mil Doscientos"></div>
-                        <div class="form-group"><label>Tu Wallet/Binance Pay ID</label><input type="text" id="ct_wallet" class="ct-input"></div>
-                        <div class="form-group"><label>Red</label><select id="ct_red" class="ct-input"><option value="TRC20">TRC20</option><option value="BEP20">BEP20</option><option value="ERC20">ERC20</option></select></div>
-
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Condiciones Generales</h3></div>
-                        <div class="form-group"><label>Días de Pago (tras entrega)</label><input type="number" id="ct_dias_pago" value="3" class="ct-input"></div>
-                        <div class="form-group"><label>Días de Revisión</label><input type="number" id="ct_dias_rev" value="5" class="ct-input"></div>
-                        <div class="form-group"><label>Rondas Ajuste</label><input type="number" id="ct_rondas" value="2" class="ct-input"></div>
-                        <div class="form-group"><label>Garantía Bugs (Días)</label><input type="number" id="ct_garantia" value="15" class="ct-input"></div>
-                        <div class="form-group"><label>Preaviso Rescisión (Días)</label><input type="number" id="ct_preaviso" value="15" class="ct-input"></div>
-                        <div class="form-group"><label>Ciudad Jurisdicción</label><input type="text" id="ct_ciudad" value="Asunción" class="ct-input"></div>
-                    </form>
-                    <button class="btn-success" style="margin-top:20px;" onclick="guardarYDescargarContrato()">💾 Guardar y Descargar Contrato PDF</button>
-                </div>
-                
-                <!-- Vista Previa -->
-                <div>
-                    <h2 style="margin-top: 0;">Vista Previa del Contrato</h2>
-                    <div id="contract-preview" class="preview-pane" style="font-size: 11px; line-height: 1.5; text-align: justify; height: 70vh; overflow-y: auto;">
-                        <h2 style="text-align: center; text-decoration: underline; margin-bottom: 20px; font-size: 16px;">CONTRATO DE PRESTACIÓN DE SERVICIOS FREELANCE</h2>
-                        <p>Conste por el presente documento, el Contrato de Prestación de Servicios que celebran por una parte, <strong class="cv_mi_nombre">-</strong>, con RUC N° <strong class="cv_mi_ruc">-</strong> y domicilio en <strong class="cv_mi_dom">-</strong> (en adelante, "EL CONTRATADO"); y por la otra parte, <strong class="cv_cliente_nombre">-</strong>, con documento de identidad N° <strong class="cv_cliente_doc">-</strong>, de nacionalidad <strong class="cv_cliente_nac">-</strong> y domicilio en <strong class="cv_cliente_dom">-</strong> (en adelante, "EL CONTRATANTE"), de acuerdo a los siguientes términos y condiciones:</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">PRIMERA: OBJETO</h3>
-                        <p>El presente contrato tiene por objeto la prestación de servicios profesionales de programación por parte de EL CONTRATADO, consistentes en el desarrollo, implementación y/o mantenimiento de scripts y herramientas de software para el motor Unity, orientadas a la optimización de modelos 3D (en adelante, "el Proyecto"), conforme a las especificaciones detalladas en el Anexo I del presente contrato.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">SEGUNDA: ALCANCE DE LOS SERVICIOS</h3>
-                        <p>Los servicios comprendidos en este contrato incluyen el desarrollo de las funcionalidades listadas en el Anexo I. Cualquier funcionalidad no especificada será considerada un adicional, sujeto a nueva cotización y acuerdo por escrito entre las partes.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">TERCERA: PLAZO DE EJECUCIÓN Y FORMA DE TRABAJO</h3>
-                        <p>EL CONTRATADO se compromete a entregar el Proyecto en un plazo de <strong class="cv_plazo">-</strong> días, contados a partir de la firma del presente. La entrega se realizará de manera digital mediante <strong class="cv_medio">-</strong>. EL CONTRATADO actuará como profesional independiente utilizando sus propios equipos y herramientas.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">CUARTA: HONORARIOS Y FORMA DE PAGO</h3>
-                        <p>En contraprestación, EL CONTRATANTE abonará a EL CONTRATADO la suma total de <strong>USDT <span class="cv_monto">-</span> (<span class="cv_monto_letras">-</span>)</strong>, mediante un único pago contra la entrega final y aceptación del Proyecto. No se contemplan anticipos ni pagos parciales.<br>
-                        El pago se realizará exclusivamente en criptomoneda USDT, mediante transferencia a la dirección/ID de EL CONTRATADO: <strong class="cv_wallet">-</strong> en la red <strong class="cv_red">-</strong>. Las comisiones de red ("gas fees") correrán por cuenta del CONTRATANTE.<br>
-                        El pago deberá efectuarse dentro de los <strong class="cv_dias_pago">-</strong> días posteriores a la entrega y aceptación. Se considerará cumplida la obligación en el momento en que la transacción quede confirmada en la blockchain, debiendo remitir el TXID como comprobante.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">QUINTA: ACEPTACIÓN, REVISIONES Y GARANTÍA</h3>
-                        <p>Una vez entregado el proyecto, EL CONTRATANTE contará con un plazo de <strong class="cv_dias_rev">-</strong> días hábiles para revisión. El contrato incluye hasta <strong class="cv_rondas">-</strong> rondas de ajustes menores sin costo adicional que no impliquen cambios sustanciales al alcance definido en el Anexo I.<br>
-                        EL CONTRATADO garantiza la corrección de errores (bugs) atribuibles a su desarrollo por un período de <strong class="cv_garantia">-</strong> días posteriores a la entrega final.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">SEXTA: PROPIEDAD INTELECTUAL</h3>
-                        <p>Únicamente tras la confirmación del pago total estipulado en la Cláusula Cuarta, EL CONTRATANTE adquirirá la titularidad plena y exclusiva sobre el código fuente y los scripts desarrollados específicamente para el Proyecto. Quedan excluidos de esta cesión el conocimiento técnico general (know-how) y utilidades previas de EL CONTRATADO.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">SÉPTIMA: IMPUESTOS Y OBLIGACIONES FISCALES</h3>
-                        <p>Cada parte será exclusivamente responsable de liquidar los impuestos que correspondan en su país de residencia. EL CONTRATADO, como contribuyente paraguayo, emitirá el comprobante de venta legal ante la DNIT de la República del Paraguay por los montos percibidos. EL CONTRATANTE no asume responsabilidad tributaria alguna en Paraguay.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">OCTAVA: CONFIDENCIALIDAD</h3>
-                        <p>EL CONTRATADO se compromete a mantener confidencialidad respecto de la información técnica o comercial a la que acceda con motivo del presente contrato, no pudiendo divulgarla a terceros sin autorización expresa de EL CONTRATANTE.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">NOVENA: RESCISIÓN Y JURISDICCIÓN</h3>
-                        <p>Cualquiera de las partes podrá rescindir el contrato mediante comunicación escrita con <strong class="cv_preaviso">-</strong> días de anticipación. En caso de rescisión, se abonará la parte proporcional de los trabajos efectivamente realizados y aceptados.<br>
-                        Para cualquier controversia, las partes se someten a la jurisdicción de los Tribunales Ordinarios de la ciudad de <strong class="cv_ciudad">-</strong>, República del Paraguay.</p>
-
-                        <p style="margin-top:20px;">En prueba de conformidad, las partes firman el presente contrato en el lugar y fecha indicados.</p>
-                        <p>Firmado en fecha: <strong class="cv_fecha">-</strong></p>
-                        
-                        <div style="display:flex; justify-content:space-between; margin-top:40px;">
-                            <div style="text-align:center; border-top:1px solid #333; padding-top:10px; width:45%;">
-                                EL CONTRATANTE<br><span class="cv_cliente_nombre">-</span><br>Doc. N° <span class="cv_cliente_doc">-</span>
-                            </div>
-                            <div style="text-align:center; border-top:1px solid #333; padding-top:10px; width:45%;">
-                                EL CONTRATADO<br><span class="cv_mi_nombre">-</span><br>RUC N° <span class="cv_mi_ruc">-</span>
-                            </div>
-                        </div>
-
                         <!-- Salto de página para el Anexo -->
                         <div class="html2pdf__page-break"></div>
 
@@ -808,7 +818,7 @@
                 element.classList.add('active');
             }
             if (tabId === 'tab-invoice') {
-                prepararNuevoInvoice();
+                
             }
         }
 
@@ -867,6 +877,7 @@
         // --- APP LOGIC ---
 
         async function cargarDatos() {
+            cargarContratosAsociados();
             const tbodyReg = document.getElementById('registrosBody');
             const tbodyDec = document.getElementById('declaracionesBody');
             const tbodyRes = document.getElementById('resumenBody');
@@ -1160,14 +1171,13 @@
             input.addEventListener('input', actualizarVistaPreviaContrato);
         });
 
-        window.guardarYDescargarContrato = async function() {
+        
+        window.guardarContratoBD = async function() {
             const v = id => document.getElementById(id).value;
-            
             if(!v('ct_cliente_nombre') || !v('ct_monto')) {
                 alert("Completa el nombre del cliente y el monto.");
                 return;
             }
-
             const payload = {
                 numero_contrato: v('ct_numero'),
                 fecha: v('ct_fecha'),
@@ -1192,19 +1202,25 @@
                 dias_preaviso: parseInt(v('ct_preaviso')) || 0,
                 jurisdiccion: v('ct_ciudad')
             };
-
-            // Intentar guardar en Supabase (si la tabla contratos existe)
             try {
                 const { error } = await supabase.from('contratos').insert([payload]);
-                if (error) console.error("Error guardando contrato en BD (quizás falta crear la tabla 'contratos'):", error);
+                if (error) {
+                    console.error("Error guardando contrato en BD:", error);
+                    alert("Error al guardar en BD. ¿Creaste la tabla 'contratos'?");
+                } else {
+                    alert("Contrato guardado exitosamente en la Nube.");
+                    cargarContratosAsociados(); // Refrescar el dropdown
+                }
             } catch(e) {
                 console.error("Supabase exception:", e);
             }
+        }
 
-            // Generar PDF
+        window.descargarContratoPDF = function() {
+            const v = id => document.getElementById(id).value;
             const element = document.getElementById('contract-preview');
             const opt = {
-                margin:       15,
+                margin:       [15, 15, 15, 15],
                 filename:     `Contrato_${v('ct_numero')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2 },
@@ -1212,7 +1228,7 @@
                 pagebreak:    { mode: ['css', 'legacy'] }
             };
 
-            const btn = document.querySelector('#tab-contratos .btn-success');
+            const btn = document.getElementById('btnDescargarContrato');
             const ogText = btn.textContent;
             btn.textContent = 'Generando PDF...';
             btn.disabled = true;
@@ -1220,64 +1236,37 @@
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.textContent = ogText;
                 btn.disabled = false;
-                prepararNuevoContrato(); 
             });
         }
-
-        window.guardarYDescargarInvoice = async function() {
-            const v = id => document.getElementById(id).value;
-            
-            if(!v('inv_emisor_nombre') || !v('inv_cliente_nombre') || !v('inv_descripcion')) {
-                alert("Completa los campos principales (Nombres y Descripción) antes de guardar.");
-                return;
-            }
-
-            const payload = {
-                invoice_number: v('inv_numero'),
-                emisor_nombre: v('inv_emisor_nombre'),
-                emisor_telefono: v('inv_emisor_tel'),
-                receptor_nombre: v('inv_cliente_nombre'),
-                receptor_telefono: v('inv_cliente_tel'),
-                cliente_wallet: v('inv_cliente_wallet'),
-                fecha_emision: v('inv_fecha'),
-                fecha_vencimiento: v('inv_vencimiento'),
-                descripcion: v('inv_descripcion'),
-                monto: parseFloat(v('inv_precio')) || 0,
-                moneda: v('inv_moneda'),
-                wallet_address: v('inv_wallet'),
-                txid: v('inv_txid')
-            };
-
-            // 1. Save to Supabase
-            const { error } = await supabase.from('invoices').insert([payload]);
-            if (error) {
-                console.error(error);
-                alert('No se pudo guardar en la nube. ¿Actualizaste la tabla invoices con los nuevos campos?');
-                return;
-            }
-
-            // 2. Generate PDF
-            const element = document.getElementById('invoice-preview');
-            const opt = {
-                margin:       10,
-                filename:     `Invoice_${v('inv_numero')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                cargarDatos(); // Refresh history
-                prepararNuevoInvoice(); // Reset for next
-            });
-        }
-
-        window.eliminarInvoice = async function(id) {
-            if(confirm("¿Eliminar registro de Invoice?")) {
-                await supabase.from('invoices').delete().eq('id', id);
-                cargarDatos();
+        
+        async function cargarContratosAsociados() {
+            try {
+                const { data, error } = await supabase
+                    .from('contratos')
+                    .select('id, created_at, contratante_nombre, numero_contrato')
+                    .order('created_at', { ascending: false });
+                    
+                if (!error && data) {
+                    const select = document.getElementById('contrato_id');
+                    select.innerHTML = '<option value="">Ninguno</option>';
+                    data.forEach(c => {
+                        const dateObj = new Date(c.created_at);
+                        const dateStr = dateObj.toLocaleDateString('es-ES') + ' ' + dateObj.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
+                        const option = document.createElement('option');
+                        option.value = c.id;
+                        option.textContent = `[${dateStr}] - Cliente: ${c.contratante_nombre} - Nº ${c.numero_contrato}`;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (e) {
+                console.error("No se pudo cargar la lista de contratos:", e);
             }
         }
+
+
+        
+
+        
 
         // GUARDAR INGRESO (existente)
         document.getElementById('ingresoForm').addEventListener('submit', async (e) => {
@@ -1326,6 +1315,7 @@
                 numero_factura: document.getElementById('numero_factura').value,
                 monto: parseFloat(document.getElementById('monto').value) || 0,
                 factura_url: factura_url,
+                contrato_id: document.getElementById('contrato_id').value || null,
                 
                 tipo_operacion: document.getElementById('tipo_operacion').value,
                 fuente: document.getElementById('fuente').value,
