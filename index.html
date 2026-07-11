@@ -472,25 +472,6 @@
                 <a href="https://marangatu.set.gov.py/eset/login" target="_blank" class="link-btn">Acceder a Marangatu</a>
             </div>
 
-            <div>
-                <h2>Balance Mensual para Declaración 120</h2>
-                <p style="color:var(--text-muted); font-size:0.9em; margin-top:-10px;">Sumatoria de montos brutos por mes calendario.</p>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Período Fiscal</th>
-                                <th>Total Bruto a Declarar</th>
-                                <th>IVA Crédito (10%)</th>
-                                <th>Neto sin IVA</th>
-                                <th>Estado DNIT</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resumenBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
             <div style="margin-top: 40px;">
                 <h2>Ficha de Declaración Mensual (Form. 120)</h2>
                 <form id="declaracionForm">
@@ -544,129 +525,7 @@
             </div>
         </div>
 
-        <!-- PESTAÑA: INVOICE GENERATOR -->
-        <div id="tab-invoice" class="tab-content">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                
-                <!-- Columna Izquierda: Formulario -->
-                <div>
-                    <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
-                        
-                        <!-- Detalles de Facturación -->
-                        <div class="form-group full-width"><h3 style="margin:0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Detalles de Facturación</h3></div>
-                        <div class="form-group"><label>Nº Invoice (Autogenerado)</label><input type="text" id="inv_numero" readonly style="background:#e2e8f0; font-family:monospace; font-weight:bold;"></div>
-                        <div class="form-group"><label>Moneda</label><input type="text" id="inv_moneda" value="USDT" class="inv-input"></div>
-                        
-                        <div class="form-group"><label>Fecha Emisión</label><input type="date" id="inv_fecha" class="inv-input"></div>
-                        <div class="form-group"><label>Fecha Vencimiento</label><input type="date" id="inv_vencimiento" class="inv-input"></div>
-                        
-                        <div class="form-group full-width"><label>Descripción del Trabajo</label><input type="text" id="inv_descripcion" placeholder="Ej. Script Development for Blender" class="inv-input"></div>
-                        <div class="form-group"><label>Cantidad / Tiempo</label><input type="text" id="inv_cantidad" value="1" class="inv-input"></div>
-                        <div class="form-group"><label>Precio Unitario</label><input type="number" id="inv_precio" value="150" class="inv-input"></div>
-
-                        <!-- Emisor (Tú) -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (Proveedor / Tú recibes el pago)</h3></div>
-                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="inv_emisor_nombre" placeholder="Ej. Richard Mareco" class="inv-input"></div>
-                        <div class="form-group"><label>Tu Teléfono / Email</label><input type="text" id="inv_emisor_tel" placeholder="Ej. +595 982..." class="inv-input"></div>
-                        <div class="form-group full-width"><label>Tu Wallet (Donde recibes el pago para el QR)</label><input type="text" id="inv_wallet" placeholder="Ej. 0xDfD5..." class="inv-input"></div>
-
-                        <!-- Receptor (Compañero) -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Datos de tu Compañero (Cliente / El que paga)</h3></div>
-                        <div class="form-group"><label>Nombre del Cliente</label><input type="text" id="inv_cliente_nombre" placeholder="Ej. Sebastian Rojas" class="inv-input"></div>
-                        <div class="form-group"><label>Teléfono / Email</label><input type="text" id="inv_cliente_tel" placeholder="Ej. +1 456..." class="inv-input"></div>
-                        <div class="form-group full-width"><label>Wallet del Cliente (Desde donde envía)</label><input type="text" id="inv_cliente_wallet" placeholder="Ej. 0xABC1..." class="inv-input"></div>
-
-                        <!-- Pago -->
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Confirmación de Pago (Opcional)</h3></div>
-                        <div class="form-group full-width"><label>TXID (Hash de Transacción)</label><input type="text" id="inv_txid" placeholder="Ej. 0xabc123..." class="inv-input"></div>
-                    </div>
-                    
-                    <button class="btn-primary btn-success" onclick="guardarYDescargarInvoice()" style="margin-top:20px; font-size: 1.1em; padding: 15px;">📄 Guardar y Descargar PDF</button>
-                </div>
-
-                <!-- Columna Derecha: Vista Previa del PDF -->
-                <div>
-                    <h2 style="margin-top: 0;">Vista Previa en Vivo</h2>
-                    <div id="invoice-preview" class="preview-pane">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-                            <img src="https://etherscan.io/assets/svg/logos/logo-etherscan.svg?v=0.0.5" alt="Etherscan Logo" style="height: 45px;">
-                            <h1 style="font-size: 2.2em; font-weight: bold; color: #111; margin: 0; border:none; letter-spacing: 2px;">FACTURA</h1>
-                        </div>
-                        
-                        <div style="border-top: 1px solid #eaeaea; margin-bottom: 30px;"></div>
-                        
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 40px; font-size: 0.9em;">
-                            <div>
-                                <table style="border:none; margin:0; width:auto;">
-                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Nº de Factura:</td><td id="pv_numero" style="border:none; font-weight:bold; color:#111;">-</td></tr>
-                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Fecha Emisión:</td><td id="pv_fecha" style="border:none; color:#111;">-</td></tr>
-                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Vencimiento:</td><td id="pv_vencimiento" style="border:none; color:#111;">-</td></tr>
-                                    <tr><td style="color:#777; padding:2px 15px 2px 0; border:none;">Descripción:</td><td id="pv_desc" style="border:none; color:#111;">-</td></tr>
-                                </table>
-                            </div>
-                            <div style="text-align: right; max-width: 250px;">
-                                <span style="color:#777; font-size:0.85em; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:5px;">Facturado a:</span>
-                                <strong id="pv_cliente_nombre" style="display:block; color:#111; font-size:1.1em; margin-bottom:2px;">-</strong>
-                                <span id="pv_cliente_tel" style="color:#777; display:block; margin-bottom:2px;">-</span>
-                                <span id="pv_cliente_wallet" style="color:#777; display:block; font-size:0.8em; word-break: break-all;">-</span>
-                            </div>
-                        </div>
-
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                            <thead>
-                                <tr style="background: #fafafa; border-bottom: 2px solid #eaeaea;">
-                                    <th style="padding: 12px; text-align: left; color: #333; font-weight: bold; border:none;">Concepto</th>
-                                    <th style="padding: 12px; text-align: left; color: #333; font-weight: bold; border:none;">Cantidad</th>
-                                    <th style="padding: 12px; text-align: right; color: #333; font-weight: bold; border:none;">Precio</th>
-                                    <th style="padding: 12px; text-align: right; color: #333; font-weight: bold; border:none;">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="border-bottom: 1px solid #eaeaea;">
-                                    <td id="pv_item_desc" style="padding: 12px; border:none;">-</td>
-                                    <td id="pv_item_qty" style="padding: 12px; border:none;">-</td>
-                                    <td id="pv_item_price" style="padding: 12px; text-align: right; border:none;">-</td>
-                                    <td id="pv_item_total" style="padding: 12px; text-align: right; border:none;">-</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
-                            <table style="width: 300px; border:none;">
-                                <tr><td style="padding: 5px; color:#777; border:none;">Subtotal:</td><td id="pv_subtotal" style="padding: 5px; text-align: right; font-weight:bold; border:none; color:#111;">-</td></tr>
-                                <tr><td style="padding: 5px; color:#777; border:none;">Descuento (%):</td><td style="padding: 5px; text-align: right; font-weight:bold; border:none; color:#111;">0</td></tr>
-                                <tr><td style="padding: 5px; color:#777; border:none;">IVA (%):</td><td style="padding: 5px; text-align: right; font-weight:bold; border:none; color:#111;">0</td></tr>
-                                <tr style="background: #eafff5;"><td style="padding: 10px 5px; font-weight:bold; color:#111; border:none;">Total:</td><td id="pv_total_final" style="padding: 10px 5px; text-align: right; font-weight:bold; color: #0f766e; border:none;">-</td></tr>
-                            </table>
-                        </div>
-
-                        <!-- Bloques de Información -->
-                        <div style="border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Información de Pago</h3>
-                                <table style="border:none; font-size: 0.9em; margin:0; width:auto;">
-                                    <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Moneda:</td><td id="pv_pay_curr" style="border:none; color:#111;">USDT</td></tr>
-                                    <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Monto a pagar:</td><td id="pv_pay_amt" style="border:none; color:#111;">-</td></tr>
-                                    <tr id="pv_wallet_row" style="display:none;"><td style="color:#777; padding:3px 15px 3px 0; border:none;">Billetera (Recibe):</td><td id="pv_pay_wallet" style="border:none; color:#111; word-break: break-all;">-</td></tr>
-                                    <tr id="pv_txid_row" style="display:none;"><td style="color:#777; padding:3px 15px 3px 0; border:none;">TXID:</td><td id="pv_pay_txid" style="border:none; color:#111; word-break: break-all; font-size:0.85em;">-</td></tr>
-                                </table>
-                            </div>
-                            <div id="pv_qr_container" style="width: 90px; height: 90px; background:#fff; display:none; align-items:center; justify-content:center; border: 1px solid #eee; padding:5px;">
-                                <img id="pv_qr" src="" style="max-width:100%;" />
-                            </div>
-                        </div>
-
-                        <div style="border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px;">
-                            <h3 style="margin: 0 0 15px 0; font-size: 1.1em; color: #111; border:none;">Información del Proveedor</h3>
-                            <table style="border:none; font-size: 0.9em; margin:0; width:auto;">
-                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Nombre Completo:</td><td id="pv_emisor_nombre" style="border:none; color:#111;">-</td></tr>
-                                <tr><td style="color:#777; padding:3px 15px 3px 0; border:none;">Contacto:</td><td id="pv_emisor_tel" style="border:none; color:#111;">-</td></tr>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+        
             
             <div style="margin-top: 40px;">
                 <h2>Historial de Invoices Generados</h2>
@@ -787,7 +646,7 @@
         // --- APP LOGIC ---
 
         async function cargarDatos() {
-            cargarContratosAsociados();
+            
             const tbodyReg = document.getElementById('registrosBody');
             const tbodyDec = document.getElementById('declaracionesBody');
             const tbodyRes = document.getElementById('resumenBody');
@@ -821,7 +680,7 @@
             
             renderIngresos();
             renderDeclaracionesYResumen();
-            renderInvoices();
+            
         }
 
         function renderIngresos() {
@@ -845,8 +704,7 @@
                     <td style="white-space: nowrap;">${reg.fecha}</td>
                     <td><strong>${reg.cliente || '-'}</strong><br><span style="font-size:0.85em; color:var(--text-muted);">${reg.fuente || ''}</span></td>
                     <td>${reg.tipo_operacion || '-'}</td>
-                    <td style="font-weight: 600;">₲${reg.monto.toLocaleString('es-PY')} <br><span style="font-size:0.85em; color:var(--text-muted); font-weight:normal;">IVA: ${reg.exento_iva ? '<span style="color:var(--success);">Exento</span>' : '₲' + iva.toLocaleString('es-PY')}</span></td>
-                    <td style="color: var(--success); font-weight: 600;">₲${(reg.monto_banco || 0).toLocaleString('es-PY')}</td>
+                    
                     <td>${adjuntosHtml}</td>
                     <td><button class="delete-btn" onclick="eliminarIngreso(${reg.id})" title="Eliminar Asiento">✕</button></td>
                 `;
@@ -857,45 +715,7 @@
         }
 
         function renderDeclaracionesYResumen() {
-            // 1. Calcular Resumen por Mes
-            const resumen = {};
-            registros.forEach(reg => {
-                const mes = reg.fecha.substring(0, 7); 
-                if (!resumen[mes]) resumen[mes] = { ingresos: 0, iva: 0, neto: 0 };
-                resumen[mes].ingresos += reg.monto; 
-                const iva = reg.exento_iva ? 0 : Math.round(reg.monto / 11);
-                resumen[mes].iva += iva;
-                resumen[mes].neto += (reg.monto - iva);
-            });
-
-            const tbodyRes = document.getElementById('resumenBody');
-            tbodyRes.innerHTML = '';
-            
-            const meses = Object.keys(resumen).sort().reverse();
-            if (meses.length === 0) {
-                tbodyRes.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Sin datos para generar balance.</td></tr>';
-            }
-
-            meses.forEach(mes => {
-                const data = resumen[mes];
-                const tr = document.createElement('tr');
-                
-                const estaDeclarado = declaraciones.some(d => d.mes_anio === mes);
-                const estadoHtml = estaDeclarado 
-                    ? `<span class="badge success">Presentada ✔️</span>` 
-                    : `<span class="badge warning">Pendiente</span>`;
-
-                tr.innerHTML = `
-                    <td><strong>${mes}</strong></td>
-                    <td style="font-weight:600;">₲${data.ingresos.toLocaleString('es-PY')}</td>
-                    <td style="color:var(--text-muted);">₲${data.iva.toLocaleString('es-PY')}</td>
-                    <td>₲${data.neto.toLocaleString('es-PY')}</td>
-                    <td>${estadoHtml}</td>
-                `;
-                tbodyRes.appendChild(tr);
-            });
-
-            // 2. Renderizar Historial de Declaraciones
+            // Renderizar Historial de Declaraciones
             const tbodyDec = document.getElementById('declaracionesBody');
             tbodyDec.innerHTML = '';
             
@@ -927,109 +747,7 @@
             });
         }
 
-        // --- FUNCIONES DE INVOICE ---
         
-        function renderInvoices() {
-            const tbodyInv = document.getElementById('invoicesBody');
-            tbodyInv.innerHTML = '';
-            if (historyInvoices.length === 0) {
-                tbodyInv.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay invoices generados.</td></tr>';
-                return;
-            }
-
-            historyInvoices.forEach(inv => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>${inv.invoice_number}</strong></td>
-                    <td>${inv.fecha_emision}</td>
-                    <td>${inv.receptor_nombre}</td>
-                    <td style="font-weight:bold;">${inv.monto}</td>
-                    <td><span class="badge">${inv.moneda}</span></td>
-                    <td><span style="font-size:0.8em; color:var(--text-muted);">${inv.txid || '-'}</span></td>
-                    <td><button class="delete-btn" onclick="eliminarInvoice(${inv.id})">✕</button></td>
-                `;
-                tbodyInv.appendChild(tr);
-            });
-        }
-
-        function prepararNuevoInvoice() {
-            // Generar numero profesional: INV-YYYYMM-XXXX
-            const dateStr = new Date().toISOString().substring(0, 7).replace('-', '');
-            const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase();
-            document.getElementById('inv_numero').value = `INV-${dateStr}-${randomHex}`;
-
-            // Fechas
-            if (!document.getElementById('inv_fecha').value) {
-                const hoy = new Date().toISOString().split('T')[0];
-                document.getElementById('inv_fecha').value = hoy;
-                document.getElementById('inv_vencimiento').value = hoy;
-            }
-
-            // Datos Memoria Local (opcional, por si borró algo)
-            if (historyInvoices.length > 0 && !document.getElementById('inv_emisor_nombre').value) {
-                document.getElementById('inv_emisor_nombre').value = historyInvoices[0].emisor_nombre || '';
-                document.getElementById('inv_emisor_tel').value = historyInvoices[0].emisor_telefono || '';
-                document.getElementById('inv_wallet').value = historyInvoices[0].wallet_address || '';
-            }
-
-            actualizarVistaPrevia();
-        }
-
-        function actualizarVistaPrevia() {
-            const v = id => document.getElementById(id).value;
-            const t = (id, val) => document.getElementById(id).textContent = val || '-';
-            
-            t('pv_numero', v('inv_numero'));
-            t('pv_fecha', v('inv_fecha'));
-            t('pv_vencimiento', v('inv_vencimiento'));
-            t('pv_desc', v('inv_descripcion'));
-            
-            // Proveedor (Tú) - Va abajo a la izquierda en el PDF
-            t('pv_emisor_nombre', v('inv_emisor_nombre'));
-            t('pv_emisor_tel', v('inv_emisor_tel'));
-            
-            // Cliente (El que paga) - Va arriba a la derecha en el PDF
-            t('pv_cliente_nombre', v('inv_cliente_nombre'));
-            t('pv_cliente_tel', v('inv_cliente_tel'));
-            t('pv_cliente_wallet', v('inv_cliente_wallet'));
-
-            t('pv_item_desc', v('inv_descripcion'));
-            t('pv_item_qty', v('inv_cantidad'));
-            
-            const precio = parseFloat(v('inv_precio')) || 0;
-            const moneda = v('inv_moneda') || '';
-            const precioTxt = precio + ' ' + moneda;
-            
-            t('pv_item_price', precioTxt);
-            t('pv_item_total', precioTxt);
-            t('pv_subtotal', precioTxt);
-            t('pv_total_final', precioTxt);
-
-            t('pv_pay_curr', moneda);
-            t('pv_pay_amt', precioTxt);
-
-            const txid = v('inv_txid');
-            if (txid) {
-                document.getElementById('pv_txid_row').style.display = 'table-row';
-                t('pv_pay_txid', txid);
-                document.getElementById('pv_qr_container').style.display = 'flex';
-                let qrData = txid.startsWith('http') ? txid : `https://etherscan.io/tx/${txid}`;
-                document.getElementById('pv_qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrData)}`;
-                document.getElementById('pv_qr').style.display = 'block';
-            } else {
-                document.getElementById('pv_txid_row').style.display = 'none';
-                document.getElementById('pv_qr_container').style.display = 'none';
-            }
-
-            const wallet = v('inv_wallet');
-            if (wallet) {
-                document.getElementById('pv_wallet_row').style.display = 'table-row';
-                t('pv_pay_wallet', wallet);
-            } else {
-                document.getElementById('pv_wallet_row').style.display = 'none';
-            }
-        }
-
         // Add event listeners to all inputs to update preview live
         document.querySelectorAll('.inv-input').forEach(input => {
             input.addEventListener('input', actualizarVistaPrevia);
@@ -1045,134 +763,12 @@
             actualizarVistaPreviaContrato();
         }
 
-        function actualizarVistaPreviaContrato() {
-            const textFields = [
-                'ct_cliente_nombre', 'ct_cliente_doc', 'ct_cliente_nac', 'ct_cliente_dom',
-                'ct_mi_nombre', 'ct_mi_ruc', 'ct_mi_dom', 'ct_proy_desc', 
-                'ct_pais_destino', 'ct_medio', 'ct_wallet', 'ct_ciudad'
-            ];
-            textFields.forEach(id => {
-                const input = document.getElementById(id);
-                const val = input ? (input.value || '-') : '-';
-                document.querySelectorAll('.cv_' + id.replace('ct_', '')).forEach(el => el.textContent = val);
-            });
-
-            const numFields = [
-                'ct_plazo', 'ct_monto', 'ct_dias_rev', 'ct_rondas', 'ct_garantia', 'ct_preaviso'
-            ];
-            numFields.forEach(id => {
-                const input = document.getElementById(id);
-                const val = input ? (input.value || '-') : '-';
-                document.querySelectorAll('.cv_' + id.replace('ct_', '')).forEach(el => el.textContent = val);
-            });
-            
-            // Lógica de fechas
-            const fechaVal = document.getElementById('ct_fecha').value;
-            if (fechaVal) {
-                const [anio, mesStr, dia] = fechaVal.split('-');
-                const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-                document.querySelectorAll('.cv_dia').forEach(el => el.textContent = dia);
-                document.querySelectorAll('.cv_mes').forEach(el => el.textContent = meses[parseInt(mesStr)-1]);
-                document.querySelectorAll('.cv_anio').forEach(el => el.textContent = anio);
-            }
-        }
+                
         
-        document.querySelectorAll('.ct-input').forEach(input => {
-            input.addEventListener('input', actualizarVistaPreviaContrato);
-        });
-
         
-        window.guardarContratoBD = async function() {
-            const v = id => document.getElementById(id).value;
-            if(!v('ct_cliente_nombre') || !v('ct_monto')) {
-                alert("Completa el nombre del cliente y el monto.");
-                return;
-            }
-            const payload = {
-                numero_contrato: v('ct_numero'),
-                fecha: v('ct_fecha'),
-                contratante_nombre: v('ct_cliente_nombre'),
-                contratante_documento: v('ct_cliente_doc'),
-                contratante_nacionalidad: v('ct_cliente_nac'),
-                contratante_domicilio: v('ct_cliente_dom'),
-                proyecto_descripcion: v('ct_proy_desc') + " - Destino: " + (v('ct_pais_destino') || ''),
-                proyecto_funcionalidades: '',
-                proyecto_requisitos: '',
-                proyecto_entregables: '',
-                plazo_dias: parseInt(v('ct_plazo')) || 0,
-                medio_entrega: v('ct_medio'),
-                monto_usdt: parseFloat(v('ct_monto')) || 0,
-                monto_letras: '',
-                wallet_id: v('ct_wallet'),
-                red_crypto: 'X4T',
-                dias_pago: 0,
-                dias_revision: parseInt(v('ct_dias_rev')) || 0,
-                rondas_ajuste: parseInt(v('ct_rondas')) || 0,
-                dias_garantia: parseInt(v('ct_garantia')) || 0,
-                dias_preaviso: parseInt(v('ct_preaviso')) || 0,
-                jurisdiccion: v('ct_ciudad')
-            };
-            try {
-                const { error } = await supabase.from('contratos').insert([payload]);
-                if (error) {
-                    console.error("Error guardando contrato en BD:", error);
-                    alert("Error al guardar en BD. ¿Creaste la tabla 'contratos'?");
-                } else {
-                    alert("Contrato guardado exitosamente en la Nube.");
-                    cargarContratosAsociados(); // Refrescar el dropdown
-                }
-            } catch(e) {
-                console.error("Supabase exception:", e);
-            }
-        }
-
-        window.descargarContratoPDF = function() {
-            const v = id => document.getElementById(id).value;
-            const element = document.getElementById('contract-preview');
-            const opt = {
-                margin:       [15, 15, 15, 15],
-                filename:     `Contrato_${v('ct_numero')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['css', 'legacy'] }
-            };
-
-            const btn = document.getElementById('btnDescargarContrato');
-            const ogText = btn.textContent;
-            btn.textContent = 'Generando PDF...';
-            btn.disabled = true;
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                btn.textContent = ogText;
-                btn.disabled = false;
-            });
-        }
         
-        async function cargarContratosAsociados() {
-            try {
-                const { data, error } = await supabase
-                    .from('contratos')
-                    .select('id, created_at, contratante_nombre, numero_contrato')
-                    .order('created_at', { ascending: false });
-                    
-                if (!error && data) {
-                    const select = document.getElementById('contrato_id');
-                    select.innerHTML = '<option value="">Ninguno</option>';
-                    data.forEach(c => {
-                        const dateObj = new Date(c.created_at);
-                        const dateStr = dateObj.toLocaleDateString('es-ES') + ' ' + dateObj.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
-                        const option = document.createElement('option');
-                        option.value = c.id;
-                        option.textContent = `[${dateStr}] - Cliente: ${c.contratante_nombre} - Nº ${c.numero_contrato}`;
-                        select.appendChild(option);
-                    });
-                }
-            } catch (e) {
-                console.error("No se pudo cargar la lista de contratos:", e);
-            }
-        }
-
+                
+        
 
         
 
