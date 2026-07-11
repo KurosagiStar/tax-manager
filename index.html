@@ -369,6 +369,10 @@
                             <label>Adjuntar Contrato (PDF)</label>
                             <input type="file" id="contrato_pdf" accept=".pdf">
                         </div>
+                        <div class="form-group">
+                            <label>Correo Aceptación (PDF)</label>
+                            <input type="file" id="correo_pdf" accept=".pdf">
+                        </div>
                     </div>
                     <button type="submit" class="btn-primary" style="margin-top: 15px;">Registrar en el Libro</button>
                 </form>
@@ -566,7 +570,8 @@
                 
                 let adjuntosHtml = '';
                 if (reg.factura_url) adjuntosHtml += `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; margin-right:5px;" title="Factura DNIT">Factura</a>`;
-                if (reg.comprobante_plataforma_url) adjuntosHtml += `<a href="${reg.comprobante_plataforma_url}" target="_blank" class="badge success" style="text-decoration:none;" title="Contrato">Contrato</a>`;
+                if (reg.comprobante_plataforma_url) adjuntosHtml += `<a href="${reg.comprobante_plataforma_url}" target="_blank" class="badge success" style="text-decoration:none; margin-right:5px;" title="Contrato">Contrato</a>`;
+                if (reg.fuente && reg.fuente.startsWith('http')) adjuntosHtml += `<a href="${reg.fuente}" target="_blank" class="badge warning" style="text-decoration:none;" title="Correo de Aceptación">Correo</a>`;
                 if (!adjuntosHtml) adjuntosHtml = '<span style="color:var(--text-muted); font-size:0.9em;">Sin Adjuntos</span>';
 
                 tr.innerHTML = `
@@ -669,6 +674,21 @@
                 }
             }
 
+            let correo_url = null;
+            const correoInput = document.getElementById('correo_pdf');
+            if (correoInput.files.length > 0) {
+                btn.textContent = 'Subiendo correo...';
+                const file = correoInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `correo_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
+                if (!uploadError) {
+                    const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
+                    correo_url = data.publicUrl;
+                }
+            }
+
             btn.textContent = 'Registrando Asiento...';
             const payload = {
                 fecha: document.getElementById('fecha').value,
@@ -679,7 +699,7 @@
                 factura_url: factura_url,
                 contrato_id: null,
                 tipo_operacion: '-',
-                fuente: '-',
+                fuente: correo_url || '-',
                 monto_banco: 0,
                 comision_fija: 0,
                 comision_porcentaje: 0,
