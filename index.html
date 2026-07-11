@@ -355,76 +355,31 @@
                 <form id="ingresoForm">
                     <div class="form-grid">
                         <div class="form-group">
+                            <label>ID Registro (Automático)</label>
+                            <input type="text" id="id_interno" readonly style="background:#e2e8f0; font-family:monospace; font-weight:bold;">
+                        </div>
+                        <div class="form-group">
                             <label>Fecha</label>
-                            <input type="date" id="fecha" required>
+                            <input type="date" id="fecha" required readonly style="background:#f1f5f9; color:var(--text-muted);">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Notas / Descripción</label>
+                            <input type="text" id="descripcion" placeholder="Ej. Pago por optimización de modelo 3D" required>
                         </div>
                         <div class="form-group">
-                            <label>Cliente / País</label>
-                            <input type="text" id="cliente" required placeholder="Ej. Juan Pérez - Paraguay">
-                            <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" id="exento_iva" style="width: auto; margin: 0;">
-                                <label for="exento_iva" style="margin: 0; text-transform: none; font-weight: normal; cursor: pointer;">Exonerar IVA (Exterior)</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Tipo de Operación</label>
-                            <select id="tipo_operacion">
-                                <option value="Servicios Profesionales">Servicios Profesionales</option>
-                                <option value="Venta de Scripts">Venta de Scripts</option>
-                                <option value="Servicio Programación">Servicio Programación</option>
-                                <option value="Otros">Otros</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Fuente / Plataforma</label>
-                            <input type="text" id="fuente" placeholder="Ej. X4T, Banco Itau, PayPal">
-                        </div>
-                        
-                        <!-- Montos -->
-                        <div class="form-group">
-                            <label>Monto Bruto Facturado (₲) - DNIT</label>
+                            <label>Monto Bruto Facturado (₲) - (Requerido para cálculo total)</label>
                             <input type="number" id="monto" required min="0" placeholder="Ej. 1100000">
                         </div>
                         <div class="form-group">
-                            <label>Monto Neto Recibido en Banco</label>
-                            <input type="number" id="monto_banco" min="0" placeholder="Ej. 1000000">
-                        </div>
-                        <div class="form-group">
-                            <label>Comisión Fija (Monto)</label>
-                            <input type="number" id="comision_fija" min="0" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>Comisión Adicional (%)</label>
-                            <input type="number" id="comision_porcentaje" step="0.01" min="0" value="0">
-                        </div>
-
-                        <!-- Detalles -->
-                        <div class="form-group">
-                            <label>Contrato Asociado</label>
-                            <select id="contrato_id">
-                                <option value="">Ninguno</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Número de Factura / CDC</label>
-                            <input type="text" id="numero_factura" placeholder="Ej. 001-001-0000001">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Descripción / Notas de la Operación</label>
-                            <input type="text" id="descripcion" placeholder="Ej. Retiro de fondos plataforma X4T">
-                        </div>
-                        
-                        <!-- Archivos -->
-                        <div class="form-group">
-                            <label>Adjunto: Factura DNIT (Opcional)</label>
+                            <label>Adjuntar Factura DNIT (PDF/Img)</label>
                             <input type="file" id="factura" accept=".pdf,image/*">
                         </div>
-                        <div class="form-group full-width">
-                            <label>Adjunto: Comprobante Plataforma (Opcional)</label>
-                            <input type="file" id="comprobante_plataforma" accept=".pdf,image/*">
+                        <div class="form-group">
+                            <label>Adjuntar Contrato (PDF)</label>
+                            <input type="file" id="contrato_pdf" accept=".pdf">
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary">Registrar en el Libro</button>
+                    <button type="submit" class="btn-primary" style="margin-top: 15px;">Registrar en el Libro</button>
                 </form>
             </div>
                 <details style="margin-top: 35px; background: #fff; border: 1px solid var(--border); border-radius: 4px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
@@ -894,8 +849,8 @@
                 const tr = document.createElement('tr');
                 
                 let adjuntosHtml = '';
-                if (reg.factura_url) adjuntosHtml += `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; margin-right:5px;" title="Factura DNIT">DNIT</a>`;
-                if (reg.comprobante_plataforma_url) adjuntosHtml += `<a href="${reg.comprobante_plataforma_url}" target="_blank" class="badge success" style="text-decoration:none;" title="Comprobante Plataforma">X4T/Plataforma</a>`;
+                if (reg.factura_url) adjuntosHtml += `<a href="${reg.factura_url}" target="_blank" class="badge" style="text-decoration:none; margin-right:5px;" title="Factura DNIT">Factura</a>`;
+                if (reg.comprobante_plataforma_url) adjuntosHtml += `<a href="${reg.comprobante_plataforma_url}" target="_blank" class="badge success" style="text-decoration:none;" title="Contrato">Contrato</a>`;
                 if (!adjuntosHtml) adjuntosHtml = '<span style="color:var(--text-muted); font-size:0.9em;">Sin Adjuntos</span>';
 
                 tr.innerHTML = `
@@ -1242,17 +1197,17 @@
             const btn = e.target.querySelector('button');
             const btnOriginalText = btn.textContent;
             btn.disabled = true;
-            btn.textContent = 'Procesando Documento...';
+            btn.textContent = 'Procesando...';
             
             let factura_url = null;
-            let comp_plat_url = null;
+            let contrato_url = null;
             
-            const facturaInput = document.getElementById('factura');
-            if (facturaInput.files.length > 0) {
-                btn.textContent = 'Subiendo factura DNIT...';
-                const file = facturaInput.files[0];
+            const factInput = document.getElementById('factura');
+            if (factInput.files.length > 0) {
+                btn.textContent = 'Subiendo factura...';
+                const file = factInput.files[0];
                 const fileExt = file.name.split('.').pop();
-                const fileName = `dnit_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                const fileName = `factura_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
                 
                 const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
                 if (!uploadError) {
@@ -1261,44 +1216,47 @@
                 }
             }
 
-            const compInput = document.getElementById('comprobante_plataforma');
-            if (compInput.files.length > 0) {
-                btn.textContent = 'Subiendo comprobante...';
-                const file = compInput.files[0];
+            const ctInput = document.getElementById('contrato_pdf');
+            if (ctInput.files.length > 0) {
+                btn.textContent = 'Subiendo contrato...';
+                const file = ctInput.files[0];
                 const fileExt = file.name.split('.').pop();
-                const fileName = `x4t_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                const fileName = `contrato_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
                 
                 const { error: uploadError } = await supabase.storage.from('facturas').upload(fileName, file);
                 if (!uploadError) {
                     const { data } = supabase.storage.from('facturas').getPublicUrl(fileName);
-                    comp_plat_url = data.publicUrl;
+                    contrato_url = data.publicUrl;
                 }
             }
 
             btn.textContent = 'Registrando Asiento...';
             const payload = {
                 fecha: document.getElementById('fecha').value,
-                cliente: document.getElementById('cliente').value,
+                cliente: document.getElementById('id_interno').value,
                 descripcion: document.getElementById('descripcion').value,
-                numero_factura: document.getElementById('numero_factura').value,
+                numero_factura: document.getElementById('id_interno').value,
                 monto: parseFloat(document.getElementById('monto').value) || 0,
                 factura_url: factura_url,
-                contrato_id: document.getElementById('contrato_id').value || null,
-                
-                tipo_operacion: document.getElementById('tipo_operacion').value,
-                fuente: document.getElementById('fuente').value,
-                monto_banco: parseFloat(document.getElementById('monto_banco').value) || 0,
-                comision_fija: parseFloat(document.getElementById('comision_fija').value) || 0,
-                comision_porcentaje: parseFloat(document.getElementById('comision_porcentaje').value) || 0,
-                comprobante_plataforma_url: comp_plat_url,
-                exento_iva: document.getElementById('exento_iva').checked
+                contrato_id: null,
+                tipo_operacion: '-',
+                fuente: '-',
+                monto_banco: 0,
+                comision_fija: 0,
+                comision_porcentaje: 0,
+                comprobante_plataforma_url: contrato_url,
+                exento_iva: false
             };
 
             const { error } = await supabase.from('impuestos').insert([payload]);
             btn.textContent = btnOriginalText; btn.disabled = false;
             
             if (error) alert('Error al guardar.');
-            else { e.target.reset(); cargarDatos(); }
+            else { 
+                e.target.reset(); 
+                prepararNuevoIngreso();
+                cargarDatos(); 
+            }
         });
 
         // GUARDAR DECLARACIÓN (existente)
