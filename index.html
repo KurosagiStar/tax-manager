@@ -376,91 +376,7 @@
                     <button type="submit" class="btn-primary" style="margin-top: 15px;">Registrar en el Libro</button>
                 </form>
             </div>
-                <details style="margin-top: 35px; background: #fff; border: 1px solid var(--border); border-radius: 4px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <summary style="font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); font-size: 1.1em; list-style: none;">
-                        <span style="margin-right: 10px;">📑</span> Generador de Contratos (Opcional)
-                    </summary>
-                    <div style="margin-top: 25px; border-top: 1px solid var(--border); padding-top: 25px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                <!-- Formulario -->
-                <div>
-                    <h2 style="margin-top: 0;">Datos del Contrato</h2>
-                    <form id="contratoForm" class="form-grid" style="grid-template-columns: 1fr; max-height: 70vh; overflow-y: auto; padding-right: 15px;">
-                        <div class="form-group"><label>Nº Contrato</label><input type="text" id="ct_numero" readonly style="background:#e2e8f0; font-family:monospace; font-weight:bold;"></div>
-                        <div class="form-group"><label>Fecha</label><input type="date" id="ct_fecha" class="ct-input"></div>
-                        
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Contratante (Cliente)</h3></div>
-                        <div class="form-group"><label>Nombre / Razón Social</label><input type="text" id="ct_cliente_nombre" class="ct-input" placeholder="Ej. Sebastian Rojas"></div>
-                        <div class="form-group"><label>Documento (Pasaporte/DNI)</label><input type="text" id="ct_cliente_doc" class="ct-input"></div>
-                        <div class="form-group"><label>Nacionalidad</label><input type="text" id="ct_cliente_nac" class="ct-input"></div>
-                        <div class="form-group"><label>Domicilio (Ciudad y País)</label><input type="text" id="ct_cliente_dom" class="ct-input"></div>
-                        <div class="form-group"><label>País de Destino (Uso del Software)</label><input type="text" id="ct_pais_destino" class="ct-input" placeholder="Ej. Chile"></div>
 
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Tus Datos (El Contratado)</h3></div>
-                        <div class="form-group"><label>Tu Nombre</label><input type="text" id="ct_mi_nombre" value="Richard Herminio Mareco Amarilla" class="ct-input"></div>
-                        <div class="form-group"><label>RUC</label><input type="text" id="ct_mi_ruc" value="-" class="ct-input"></div>
-                        <div class="form-group"><label>Domicilio</label><input type="text" id="ct_mi_dom" value="Asunción, Paraguay" class="ct-input"></div>
-
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Proyecto y Entrega</h3></div>
-                        <div class="form-group full-width"><label>Descripción del Proyecto y Funcionalidades</label><textarea id="ct_proy_desc" rows="3" class="ct-input" style="width:100%; border:1px solid var(--border); padding:8px; border-radius:4px;" placeholder="Ej. Herramienta de Editor de Unity..."></textarea></div>
-                        <div class="form-group"><label>Plazo Entrega (Días)</label><input type="number" id="ct_plazo" value="15" class="ct-input"></div>
-                        <div class="form-group"><label>Medio Entrega</label><input type="text" id="ct_medio" value="Repositorio Git Privado" class="ct-input"></div>
-
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Pagos</h3></div>
-                        <div class="form-group"><label>Monto Total (USDT)</label><input type="number" id="ct_monto" class="ct-input"></div>
-                        <div class="form-group"><label>Dato X4T (Wallet/Usuario)</label><input type="text" id="ct_wallet" class="ct-input"></div>
-
-                        <div class="form-group full-width"><h3 style="margin:10px 0 0 0; font-size:1em; border-bottom:1px solid var(--border); padding-bottom:5px;">Condiciones Generales</h3></div>
-                        <div class="form-group"><label>Días de Revisión</label><input type="number" id="ct_dias_rev" value="5" class="ct-input"></div>
-                        <div class="form-group"><label>Rondas Ajuste</label><input type="number" id="ct_rondas" value="2" class="ct-input"></div>
-                        <div class="form-group"><label>Garantía Bugs (Días)</label><input type="number" id="ct_garantia" value="15" class="ct-input"></div>
-                        <div class="form-group"><label>Preaviso Rescisión (Días)</label><input type="number" id="ct_preaviso" value="15" class="ct-input"></div>
-                        <div class="form-group"><label>Ciudad Jurisdicción</label><input type="text" id="ct_ciudad" value="Asunción" class="ct-input"></div>
-                    </form>
-                    <div style="display: flex; gap: 10px; margin-top:20px;">
-                            <button type="button" class="btn-primary" onclick="guardarContratoBD()">💾 Guardar Contrato en la Nube</button>
-                            <button type="button" class="btn-success" id="btnDescargarContrato" onclick="descargarContratoPDF()">📄 Descargar PDF</button>
-                        </div>
-                </div>
-                
-                <!-- Vista Previa -->
-                <div>
-                    <h2 style="margin-top: 0;">Vista Previa del Contrato</h2>
-                    <div id="contract-preview" class="preview-pane" style="font-size: 12px; line-height: 1.5; text-align: justify; height: 70vh; overflow-y: auto;">
-                        <h2 style="text-align: center; text-decoration: underline; margin-bottom: 20px; font-size: 16px;">CONTRATO DE PRESTACIÓN DE SERVICIOS PROFESIONALES</h2>
-                        <p>A los <strong class="cv_dia">-</strong> días del mes de <strong class="cv_mes">-</strong> de <strong class="cv_anio">-</strong>, entre <strong class="cv_cliente_nombre">-</strong>, doc. N° <strong class="cv_cliente_doc">-</strong>, nacionalidad <strong class="cv_cliente_nac">-</strong>, domicilio en <strong class="cv_cliente_dom">-</strong>, en adelante "EL CONTRATANTE"; y <strong class="cv_mi_nombre">-</strong>, RUC N° <strong class="cv_mi_ruc">-</strong>, domicilio en <strong class="cv_mi_dom">-</strong>, República del Paraguay, en adelante "EL CONTRATADO"; acuerdan lo siguiente:</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">PRIMERA: OBJETO</h3>
-                        <p>EL CONTRATADO desarrollará scripts/herramientas de software para Unity orientadas a la optimización de modelos 3D, conforme a: <strong class="cv_proy_desc">-</strong>. El producto será destinado a su uso fuera de Paraguay, en <strong class="cv_pais_destino">-</strong>.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">SEGUNDA: PLAZO Y ENTREGA</h3>
-                        <p>Plazo de entrega: <strong class="cv_plazo">-</strong> días desde la firma. Entrega vía <strong class="cv_medio">-</strong>, incluyendo código fuente. EL CONTRATANTE tendrá <strong class="cv_dias_rev">-</strong> días hábiles para revisión, incluyendo <strong class="cv_rondas">-</strong> rondas de ajustes menores sin costo adicional.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">TERCERA: PAGO</h3>
-                        <p>Monto total: USDT <strong class="cv_monto">-</strong>, pago único contra entrega y aceptación final (sin anticipos). Se abonará vía la plataforma X4T S.A. (billetera/usuario: <strong class="cv_wallet">-</strong>), autorizada en Paraguay para recepción y conversión de criptoactivos a guaraníes según su cotización vigente. Comisiones de red/plataforma a cargo de EL CONTRATANTE. Comprobante (TXID o constancia de X4T S.A.) a remitir dentro de 24 hs de efectuado el pago.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">CUARTA: PROPIEDAD INTELECTUAL Y CONFIDENCIALIDAD</h3>
-                        <p>Efectuado el pago total, el código fuente del Proyecto pasa a titularidad de EL CONTRATANTE, excepto librerías de terceros y know-how general de EL CONTRATADO. Ambas partes mantendrán confidencialidad sobre la información compartida con motivo de este contrato.</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">QUINTA: INDEPENDENCIA E IMPUESTOS</h3>
-                        <p>No existe relación laboral entre las partes. Cada una responde por sus propias obligaciones tributarias según su país. EL CONTRATADO emitirá el comprobante correspondiente ante la DNIT (Paraguay).</p>
-
-                        <h3 style="font-size: 12px; margin-top: 15px;">SEXTA: GARANTÍA, RESCISIÓN Y JURISDICCIÓN</h3>
-                        <p>Garantía de corrección de errores propios del desarrollo por <strong class="cv_garantia">-</strong> días tras la entrega. Cualquier parte puede rescindir con <strong class="cv_preaviso">-</strong> días de preaviso, abonándose el trabajo aceptado hasta esa fecha. Para conflictos, jurisdicción de los Tribunales Ordinarios de <strong class="cv_ciudad">-</strong>, Paraguay.</p>
-
-                        <p style="margin-top:20px;">En prueba de conformidad, firman en dos ejemplares de un mismo tenor.</p>
-
-                        <div style="display:flex; justify-content:space-between; margin-top:40px;">
-                            <div style="text-align:center; border-top:1px solid #333; padding-top:10px; width:45%;">
-                                EL CONTRATANTE<br><span class="cv_cliente_nombre">-</span><br>Doc. N° <span class="cv_cliente_doc">-</span>
-                            </div>
-                            <div style="text-align:center; border-top:1px solid #333; padding-top:10px; width:45%;">
-                                EL CONTRATADO<br><span class="cv_mi_nombre">-</span><br>RUC N° <span class="cv_mi_ruc">-</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
 
         <!-- PESTAÑA: DECLARACIONES MENSUALES -->
         <div id="tab-declaraciones" class="tab-content">
@@ -525,46 +441,7 @@
             </div>
         </div>
 
-        
-            
-            <div style="margin-top: 40px;">
-                <h2>Historial de Invoices Generados</h2>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nº Invoice</th>
-                                <th>Fecha Emisión</th>
-                                <th>Cliente</th>
-                                <th>Monto</th>
-                                <th>Moneda</th>
-                                <th>TXID</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="invoicesBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
 
-                        <!-- Salto de página para el Anexo -->
-                        <div class="html2pdf__page-break"></div>
-
-                        <h2 style="text-align: center; text-decoration: underline; margin-top: 20px; font-size: 16px;">ANEXO I: ESPECIFICACIONES DEL PROYECTO</h2>
-                        <ol style="margin-top:20px;">
-                            <li style="margin-bottom:10px;"><strong>Descripción general del Proyecto:</strong><br><span class="cv_proy_desc" style="font-style: italic;">-</span></li>
-                            <li style="margin-bottom:10px;"><strong>Funcionalidades incluidas:</strong><br><div class="cv_proy_func" style="white-space: pre-wrap; font-style: italic; margin-top:5px;">-</div></li>
-                            <li style="margin-bottom:10px;"><strong>Requisitos técnicos / compatibilidad:</strong> <span class="cv_proy_req">-</span></li>
-                            <li style="margin-bottom:10px;"><strong>Entregables:</strong> <span class="cv_proy_ent">-</span></li>
-                            <li style="margin-bottom:10px;"><strong>Fuera de alcance:</strong> <span class="cv_proy_out">-</span></li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
@@ -585,9 +462,6 @@
             document.getElementById(tabId).classList.add('active');
             if (element) {
                 element.classList.add('active');
-            }
-            if (tabId === 'tab-invoice') {
-                
             }
         }
 
@@ -649,15 +523,12 @@
             
             const tbodyReg = document.getElementById('registrosBody');
             const tbodyDec = document.getElementById('declaracionesBody');
-            const tbodyRes = document.getElementById('resumenBody');
-            const tbodyInv = document.getElementById('invoicesBody');
             
             tbodyReg.innerHTML = '<tr><td colspan="5" style="text-align:center;">Sincronizando con la base de datos...</td></tr>';
             
-            const [impReq, decReq, invReq] = await Promise.all([
+            const [impReq, decReq] = await Promise.all([
                 supabase.from('impuestos').select('*').order('fecha', { ascending: false }),
-                supabase.from('declaraciones_iva').select('*').order('mes_anio', { ascending: false }),
-                supabase.from('invoices').select('*').order('created_at', { ascending: false })
+                supabase.from('declaraciones_iva').select('*').order('mes_anio', { ascending: false })
             ]);
             
             if (impReq.error) {
@@ -672,15 +543,8 @@
                 declaraciones = decReq.data || [];
             }
 
-            if (invReq.error) {
-                tbodyInv.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--danger);">Ejecute el script SQL para Invoices.</td></tr>`;
-            } else {
-                historyInvoices = invReq.data || [];
-            }
-            
             renderIngresos();
             renderDeclaracionesYResumen();
-            
         }
 
         function renderIngresos() {
