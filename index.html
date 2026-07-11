@@ -348,10 +348,7 @@
                 <h2>Ficha de Nuevo Ingreso</h2>
                 <form id="ingresoForm">
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label>ID Registro (Automático)</label>
-                            <input type="text" id="id_interno" readonly style="background:#e2e8f0; font-family:monospace; font-weight:bold;">
-                        </div>
+
                         <div class="form-group">
                             <label>Fecha</label>
                             <input type="date" id="fecha" required readonly style="background:#f1f5f9; color:var(--text-muted);">
@@ -376,6 +373,23 @@
                     </div>
                     <button type="submit" class="btn-primary" style="margin-top: 15px;">Registrar en el Libro</button>
                 </form>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <h2>Historial de Ingresos</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Archivos Adjuntos</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="registrosBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -524,8 +538,6 @@
         function prepararNuevoIngreso() {
             const hoy = new Date().toISOString().split('T')[0];
             document.getElementById('fecha').value = hoy;
-            const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase();
-            document.getElementById('id_interno').value = `REG-${hoy.replace(/-/g, '')}-${randomHex}`;
         }
 
         async function cargarDatos() {
@@ -576,9 +588,7 @@
 
                 tr.innerHTML = `
                     <td style="white-space: nowrap;">${reg.fecha}</td>
-                    <td><strong>${reg.cliente || '-'}</strong><br><span style="font-size:0.85em; color:var(--text-muted);">${reg.fuente || ''}</span></td>
-                    <td>${reg.tipo_operacion || '-'}</td>
-                    
+                    <td><strong>${reg.descripcion || '-'}</strong></td>
                     <td>${adjuntosHtml}</td>
                     <td><button class="delete-btn" onclick="eliminarIngreso(${reg.id})" title="Eliminar Asiento">✕</button></td>
                 `;
@@ -692,9 +702,9 @@
             btn.textContent = 'Registrando Asiento...';
             const payload = {
                 fecha: document.getElementById('fecha').value,
-                cliente: document.getElementById('id_interno').value,
+                cliente: '-',
                 descripcion: document.getElementById('descripcion').value,
-                numero_factura: document.getElementById('id_interno').value,
+                numero_factura: '-',
                 monto: 0,
                 factura_url: factura_url,
                 contrato_id: null,
