@@ -9,9 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
     
-    <!-- html2pdf for Invoice Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <style>
         :root {
             --bg-body: #e2e8f0;
@@ -509,6 +506,7 @@
             if (session) {
                 document.getElementById('authContainer').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'block';
+                prepararNuevoIngreso();
                 cargarDatos(); 
             } else {
                 document.getElementById('authContainer').style.display = 'flex';
@@ -518,6 +516,13 @@
 
 
         // --- APP LOGIC ---
+
+        function prepararNuevoIngreso() {
+            const hoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha').value = hoy;
+            const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase();
+            document.getElementById('id_interno').value = `REG-${hoy.replace(/-/g, '')}-${randomHex}`;
+        }
 
         async function cargarDatos() {
             
@@ -612,20 +617,7 @@
         }
 
         
-        // Add event listeners to all inputs to update preview live
-        document.querySelectorAll('.inv-input').forEach(input => {
-            input.addEventListener('input', actualizarVistaPrevia);
-        });
-        document.getElementById('inv_fecha').addEventListener('change', actualizarVistaPrevia);
-        document.getElementById('inv_vencimiento').addEventListener('change', actualizarVistaPrevia);
 
-        // --- LÓGICA DE CONTRATOS FREELANCE ---
-        function prepararNuevoContrato() {
-            const now = new Date();
-            document.getElementById('ct_numero').value = `CT-${now.getFullYear()}-${Math.floor(Math.random()*10000).toString().padStart(4, '0')}`;
-            document.getElementById('ct_fecha').value = now.toISOString().split('T')[0];
-            actualizarVistaPreviaContrato();
-        }
 
                 
         
