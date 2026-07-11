@@ -345,10 +345,7 @@
 
         <!-- PESTAÑA: INGRESOS -->
         <div id="tab-ingresos" class="tab-content active">
-            <div class="totals">
-                <span>TOTAL BRUTO FACTURADO: ₲<span id="totalMonto">0</span></span>
-                <span>TOTAL IVA (10%): ₲<span id="totalIva">0</span></span>
-            </div>
+            
 
             <div>
                 <h2>Ficha de Nuevo Ingreso</h2>
@@ -366,10 +363,7 @@
                             <label>Notas / Descripción</label>
                             <input type="text" id="descripcion" placeholder="Ej. Pago por optimización de modelo 3D" required>
                         </div>
-                        <div class="form-group">
-                            <label>Monto Bruto Facturado (₲) - (Requerido para cálculo total)</label>
-                            <input type="number" id="monto" required min="0" placeholder="Ej. 1100000">
-                        </div>
+                        
                         <div class="form-group">
                             <label>Adjuntar Factura DNIT (PDF/Img)</label>
                             <input type="file" id="factura" accept=".pdf,image/*">
@@ -799,7 +793,7 @@
             const tbodyRes = document.getElementById('resumenBody');
             const tbodyInv = document.getElementById('invoicesBody');
             
-            tbodyReg.innerHTML = '<tr><td colspan="7" style="text-align:center;">Sincronizando con la base de datos...</td></tr>';
+            tbodyReg.innerHTML = '<tr><td colspan="5" style="text-align:center;">Sincronizando con la base de datos...</td></tr>';
             
             const [impReq, decReq, invReq] = await Promise.all([
                 supabase.from('impuestos').select('*').order('fecha', { ascending: false }),
@@ -808,7 +802,7 @@
             ]);
             
             if (impReq.error) {
-                tbodyReg.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);">Error de conexión: ${impReq.error.message}</td></tr>`;
+                tbodyReg.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--danger);">Error de conexión: ${impReq.error.message}</td></tr>`;
             } else {
                 registros = impReq.data || [];
             }
@@ -820,7 +814,7 @@
             }
 
             if (invReq.error) {
-                tbodyInv.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--danger);">Ejecute el script SQL para Invoices.</td></tr>`;
+                tbodyInv.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--danger);">Ejecute el script SQL para Invoices.</td></tr>`;
             } else {
                 historyInvoices = invReq.data || [];
             }
@@ -833,18 +827,12 @@
         function renderIngresos() {
             const tbody = document.getElementById('registrosBody');
             tbody.innerHTML = '';
-            let total = 0;
-
             if (registros.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">Sin asientos registrados.</td></tr>';
-                document.getElementById('totalMonto').textContent = '0';
-                document.getElementById('totalIva').textContent = '0';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Sin asientos registrados.</td></tr>';
                 return;
             }
 
-            registros.forEach((reg) => {
-                total += reg.monto;
-                const iva = reg.exento_iva ? 0 : Math.round(reg.monto / 11); 
+            registros.forEach((reg) => { 
 
                 const tr = document.createElement('tr');
                 
@@ -865,8 +853,7 @@
                 tbody.appendChild(tr);
             });
 
-            document.getElementById('totalMonto').textContent = total.toLocaleString('es-PY');
-            document.getElementById('totalIva').textContent = Math.round(total / 11).toLocaleString('es-PY');
+            
         }
 
         function renderDeclaracionesYResumen() {
@@ -946,7 +933,7 @@
             const tbodyInv = document.getElementById('invoicesBody');
             tbodyInv.innerHTML = '';
             if (historyInvoices.length === 0) {
-                tbodyInv.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No hay invoices generados.</td></tr>';
+                tbodyInv.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay invoices generados.</td></tr>';
                 return;
             }
 
@@ -1236,7 +1223,7 @@
                 cliente: document.getElementById('id_interno').value,
                 descripcion: document.getElementById('descripcion').value,
                 numero_factura: document.getElementById('id_interno').value,
-                monto: parseFloat(document.getElementById('monto').value) || 0,
+                monto: 0,
                 factura_url: factura_url,
                 contrato_id: null,
                 tipo_operacion: '-',
