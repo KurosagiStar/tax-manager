@@ -740,11 +740,12 @@
             }
 
             btn.textContent = 'Registrando Asiento...';
+            const uniqueFallback = 'REG-' + Date.now();
             const payload = {
                 fecha: document.getElementById('fecha').value,
                 cliente: '-',
                 descripcion: document.getElementById('descripcion').value,
-                numero_factura: recibo_url || '-',
+                numero_factura: recibo_url || uniqueFallback,
                 monto: 0,
                 factura_url: factura_url,
                 contrato_id: null,
@@ -760,7 +761,10 @@
             const { error } = await supabase.from('impuestos').insert([payload]);
             btn.textContent = btnOriginalText; btn.disabled = false;
             
-            if (error) alert('Error al guardar.');
+            if (error) {
+                alert('Error al guardar: ' + error.message);
+                console.error(error);
+            }
             else { 
                 e.target.reset(); 
                 prepararNuevoIngreso();
